@@ -51,6 +51,9 @@ func _ready():
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
 
 
+### Loads the track and sets the volume of the current track
+#	trackname: Name of the track to load
+#	volume: How loud the track should be (default is 1.0)
 func load_track(trackname: String, volume: float = 1.0) -> void:
 	if tracklist.has(trackname):
 		# Clear the entire trackspace
@@ -75,18 +78,28 @@ func load_track(trackname: String, volume: float = 1.0) -> void:
 			asp.stream = load(PATH_TO_MUSIC + _track.stream[i])
 			asp.bus = MUSIC_PLAYER_BUS
 			asp.autoplay = true			# REMOVE THIS!!!
-			asp.volume_db = lerp(MIN_DB, MAX_DB, sqrt(_layer_volumes[i] * volume))
+			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
 			_tracks_node.add_child(asp)
 			i += 1
 		add_child(_tracks_node)
 	return
 
 
+### Sets the volume to the normalized float
+#	volume
 func set_volume(volume: float) -> void:
 	_volume = volume
 	var i = 0
 	for asp in get_node(_track.name).get_children():
 		if asp is AudioStreamPlayer:
-			asp.volume_db = lerp(MIN_DB, MAX_DB, sqrt(_layer_volumes[i] * volume))
+			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
 		i += 1
-	pass
+
+#########################################################################################
+#
+#	Private functions
+#
+
+
+func _calculate_db(normal_volume: float) -> float:	
+	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/10))
