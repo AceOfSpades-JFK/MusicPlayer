@@ -1,0 +1,18 @@
+{
+    "tracks": [
+        {
+            "name": "Regal",
+            "stream": [
+                "regal1.ogg",
+                "regal2.ogg"
+            ]
+        },
+        {
+            "name": "Hell",
+            "stream": [
+                "hell1.ogg",
+                "hell2.ogg"
+            ]
+        }
+    ]
+}
