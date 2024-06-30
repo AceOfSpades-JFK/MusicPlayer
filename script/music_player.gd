@@ -13,16 +13,17 @@ const MAX_DB = 0.0
 const MIN_DB = -80.0
 
 
-class Track:
+class TrackInfo:
 	var name: String
+	var layer_count: int
 	var stream: Array
 
 
 ### The tracklist for the current project
 var tracklist: Dictionary
 
+var _track: TrackInfo
 var _tracks_node: Node				# Use a node so that it can be easily cleared
-var _layer_count: int = 0
 var _volume: float = 1.0
 var _layer_volumes: Array[float]
 
@@ -41,9 +42,10 @@ func _ready():
 
 		# Loop through all the tracks and put them in the tracklist dictionary
 		for t in tracks:
-			var newTrack = Track.new()
+			var newTrack = TrackInfo.new()
 			newTrack.name = t["name"]
 			newTrack.stream = t["stream"]
+			newTrack.layer_count = t["stream"].size()
 			tracklist[newTrack.name] = newTrack
 	else:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
@@ -58,20 +60,19 @@ func load_track(trackname: String, volume: float = 1.0) -> void:
 		_tracks_node = Node.new()
 
 		# Initialize private variables dedicated for playback
-		var t: Track = tracklist[trackname]
-		_tracks_node.name = t.name
+		_track = tracklist[trackname]
+		_tracks_node.name = _track.name
 		_volume = volume
-		_layer_count = t.stream.size()
 		_layer_volumes.clear()
-		_layer_volumes.resize(_layer_count)
+		_layer_volumes.resize(_track.layer_count)
 		_layer_volumes.fill(1.0)
 
 		# Create the nodes of AudioStreamPlayers
 		var i = 0
-		for s in t.stream:
+		for s in _track.stream:
 			var asp: AudioStreamPlayer = AudioStreamPlayer.new()
 			asp.name = trackname + "#" + str(i)
-			asp.stream = load(PATH_TO_MUSIC + t.stream[i])
+			asp.stream = load(PATH_TO_MUSIC + _track.stream[i])
 			asp.bus = MUSIC_PLAYER_BUS
 			asp.autoplay = true			# REMOVE THIS!!!
 			asp.volume_db = lerp(MIN_DB, MAX_DB, sqrt(_layer_volumes[i] * volume))
@@ -79,3 +80,13 @@ func load_track(trackname: String, volume: float = 1.0) -> void:
 			i += 1
 		add_child(_tracks_node)
 	return
+
+
+func set_volume(volume: float) -> void:
+	_volume = volume
+	var i = 0
+	for asp in get_node(_track.name).get_children():
+		if asp is AudioStreamPlayer:
+			asp.volume_db = lerp(MIN_DB, MAX_DB, sqrt(_layer_volumes[i] * volume))
+		i += 1
+	pass
