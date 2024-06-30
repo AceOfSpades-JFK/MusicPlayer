@@ -22,10 +22,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -83.0
-offset_top = -20.0
-offset_right = 83.0
-offset_bottom = 20.0
+offset_left = -189.0
+offset_top = -46.0
+offset_right = 189.0
+offset_bottom = 47.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -56,3 +56,4 @@ value = 1.0
 [connection signal="pressed" from="VBoxContainer/Regal" to="." method="_on_regal_pressed"]
 [connection signal="pressed" from="VBoxContainer/Hell" to="." method="_on_hell_pressed"]
 [connection signal="drag_ended" from="VBoxContainer/HBoxContainer/VolumeSlider" to="." method="_on_volume_slider_drag_ended"]
+[connection signal="drag_started" from="VBoxContainer/HBoxContainer/VolumeSlider" to="." method="_on_volume_slider_drag_started"]

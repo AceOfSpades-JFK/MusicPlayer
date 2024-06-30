@@ -102,4 +102,4 @@ func set_volume(volume: float) -> void:
 
 
 func _calculate_db(normal_volume: float) -> float:	
-	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/10))
+	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/7.0))
