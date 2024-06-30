@@ -54,7 +54,7 @@ func _ready():
 ### Loads the track and sets the volume of the current track
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
-func load_track(trackname: String, volume: float = 1.0) -> void:
+func load_track(trackname: String, vol: float = 1.0) -> void:
 	if tracklist.has(trackname):
 		# Clear the entire trackspace
 		if _tracks_node != null:
@@ -65,7 +65,7 @@ func load_track(trackname: String, volume: float = 1.0) -> void:
 		# Initialize private variables dedicated for playback
 		_track = tracklist[trackname]
 		_tracks_node.name = _track.name
-		_volume = volume
+		_volume = vol
 		_layer_volumes.clear()
 		_layer_volumes.resize(_track.layer_count)
 		_layer_volumes.fill(1.0)
@@ -78,22 +78,40 @@ func load_track(trackname: String, volume: float = 1.0) -> void:
 			asp.stream = load(PATH_TO_MUSIC + _track.stream[i])
 			asp.bus = MUSIC_PLAYER_BUS
 			asp.autoplay = true			# REMOVE THIS!!!
-			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
+			asp.volume_db = _calculate_db(_layer_volumes[i] * vol)
 			_tracks_node.add_child(asp)
 			i += 1
 		add_child(_tracks_node)
 	return
 
 
-### Sets the volume to the normalized float
-#	volume
-func set_volume(volume: float) -> void:
-	_volume = volume
+### Sets the volume of the whole track to the normalized float
+#	volume: How loud should the current track be
+func set_volume(vol: float) -> void:
+	_volume = vol
 	var i = 0
 	for asp in get_node(_track.name).get_children():
 		if asp is AudioStreamPlayer:
-			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
+			asp.volume_db = _calculate_db(_layer_volumes[i] * vol)
 		i += 1
+
+
+### Sets the volume of a layer to the normalized float
+#	layer: Which layer to change the volume
+#	volume: How loud should the current layer be
+func set_layer_volume(layer: int, vol: float) -> void:
+	var asp: AudioStreamPlayer = get_node(_track.name).get_children()[layer]
+	asp.volume_db = _calculate_db(vol * _volume)
+	_layer_volumes[layer] = vol
+
+
+func get_current_track() -> TrackInfo:
+	return _track
+
+
+func get_layer_count() -> int:
+	return _track.layer_count
+	
 
 #########################################################################################
 #
