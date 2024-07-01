@@ -39,15 +39,11 @@ func _ready():
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
 
 
-### Loads the track and sets the volume of the current track
+### Loads the track with the provided volume and sets it as the current track
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
 func load_track(trackname: String, vol: float = 1.0) -> void:
 	if tracklist.has(trackname):
-		if _current_track:
-			_current_track.name = '__goodbye__'
-			_current_track.queue_free()
-		
 		# Get the track info, create the track node, and add it to the scene tree
 		var ti = tracklist[trackname]
 		var t: Track = Track.new()
@@ -58,5 +54,41 @@ func load_track(trackname: String, vol: float = 1.0) -> void:
 		_current_track = t
 
 
+func unload_track() -> void:
+	var t: Track = _get_track("")
+	if t:
+		if t == _current_track:
+			_current_track = null
+		t.name = '__goodbye__'
+		t.queue_free()
+
+
+func play() -> void:
+	var t: Track = _get_track("")
+	if t:
+		t.play()
+
+
+func stop() -> void:
+	var t: Track = _get_track("")
+	if t:
+		t.stop()
+
+
 func get_current_track() -> Track:
 	return _current_track
+
+
+func _get_track(trackname: String) -> Track:
+	# If no track name is given, return the current track
+	if trackname.is_empty():
+		return _current_track
+
+	# If a track name is given, return the specified track
+	elif has_node(trackname):
+		return get_node(trackname)
+
+	# Or just print this error
+	else:
+		printerr("Track (" + trackname + ") is not currently loaded!")
+		return null

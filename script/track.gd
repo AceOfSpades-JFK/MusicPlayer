@@ -33,7 +33,6 @@ func _ready():
 			asp.name = track_info.name + "#" + str(i)
 			asp.stream = load(PATH_TO_MUSIC + track_info.stream[i])
 			asp.bus = MUSIC_PLAYER_BUS
-			asp.autoplay = true			# REMOVE THIS!!!
 			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
 			add_child(asp)
 			_layers[i] = asp
@@ -54,6 +53,16 @@ func _process(_delta):
 	_prev_vol = volume
 
 
+func play() -> void:
+	for c: AudioStreamPlayer in get_children():
+		c.play()
+
+
+func stop() -> void:
+	for c: AudioStreamPlayer in get_children():
+		c.stop()
+
+
 ### Sets the volume of a layer to the normalized float
 #	layer: Which layer to change the volume
 #	volume: How loud should the current layer be
@@ -70,6 +79,10 @@ func fade_volume(vol: float, duration: float = 1.0) -> void:
 		_tween.tween_property(self, "volume", vol, duration)
 	else:
 		volume = vol
+
+
+func fade_out(duration: float = 1.0) -> void:
+	pass
 
 
 func get_layer_count():

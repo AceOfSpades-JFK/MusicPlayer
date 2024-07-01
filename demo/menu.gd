@@ -19,10 +19,11 @@ func _change_track(track_name):
 		$VBoxContainer/LayerGrid.name = "__goodbye__"
 	var lg: GridContainer =  GridContainer.new()
 	lg.name = "LayerGrid"
-	lg.layout_direction = LAYOUT_DIRECTION_LOCALE
 
-	# Load the track
+	# Load and play the track
+	_music_player.unload_track()
 	_music_player.load_track(track_name, volume_slider.value)
+	_music_player.play()
 
 	# Something
 	for i in range(_music_player.get_current_track().get_layer_count()):
@@ -41,7 +42,7 @@ func _on_checkbox_pressed():
 		var f: float = 1.0
 		if !cb.button_pressed:
 			f = 0.0
-		$MusicPlayer.set_layer_volume(i, f)
+		$MusicPlayer.get_current_track().set_layer_volume(i, f)
 		i += 1 
 	
 	
