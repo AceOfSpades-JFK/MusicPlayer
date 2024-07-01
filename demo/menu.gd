@@ -58,3 +58,7 @@ func _process(_delta):
 
 func _on_volume_slider_drag_started():
 	_dragging = true
+
+
+func _on_fade_pressed():
+	$MusicPlayer.fade_volume($VBoxContainer/HBoxContainer2/FadeVolumeSpinBox.value, 1.0)

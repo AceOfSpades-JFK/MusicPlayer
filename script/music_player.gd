@@ -26,6 +26,8 @@ var _track: TrackInfo
 var _tracks_node: Node				# Use a node so that it can be easily cleared
 var _volume: float = 1.0
 var _layer_volumes: Array[float]
+var _tween: Tween
+var _layer_tweens: Array[Tween]
 
 
 func _ready():
@@ -51,6 +53,19 @@ func _ready():
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
 
 
+func _process(_delta):
+	# Apply the global volume upon tweening
+	if _tween:
+		_apply_global_volume()
+	
+	# Apply the layer volume upon tweening
+	var i = 0
+	for t: Tween in _layer_tweens:
+		if t:
+			_apply_layer_volume(i)
+		i += 1
+
+
 ### Loads the track and sets the volume of the current track
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
@@ -69,6 +84,8 @@ func load_track(trackname: String, vol: float = 1.0) -> void:
 		_layer_volumes.clear()
 		_layer_volumes.resize(_track.layer_count)
 		_layer_volumes.fill(1.0)
+		_layer_tweens.clear()
+		_layer_tweens.resize(_track.layer_count)
 
 		# Create the nodes of AudioStreamPlayers
 		var i = 0
@@ -89,20 +106,25 @@ func load_track(trackname: String, vol: float = 1.0) -> void:
 #	volume: How loud should the current track be
 func set_volume(vol: float) -> void:
 	_volume = vol
-	var i = 0
-	for asp in get_node(_track.name).get_children():
-		if asp is AudioStreamPlayer:
-			asp.volume_db = _calculate_db(_layer_volumes[i] * vol)
-		i += 1
+	_apply_global_volume()
 
 
 ### Sets the volume of a layer to the normalized float
 #	layer: Which layer to change the volume
 #	volume: How loud should the current layer be
 func set_layer_volume(layer: int, vol: float) -> void:
-	var asp: AudioStreamPlayer = get_node(_track.name).get_children()[layer]
-	asp.volume_db = _calculate_db(vol * _volume)
 	_layer_volumes[layer] = vol
+	_apply_layer_volume(layer)
+
+
+func fade_volume(vol: float, duration: float = 1.0) -> void:
+	if duration > 0.0:
+		if _tween:
+			_tween.kill()
+		_tween = create_tween()
+		_tween.tween_property(self, "_volume", vol, duration)
+	else:
+		set_volume(vol)
 
 
 func get_current_track() -> TrackInfo:
@@ -120,4 +142,18 @@ func get_layer_count() -> int:
 
 
 func _calculate_db(normal_volume: float) -> float:	
-	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/7.0))
+	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/5.0))
+
+
+func _apply_global_volume() -> void:
+	var i = 0
+	for asp in get_node(_track.name).get_children():
+		if asp is AudioStreamPlayer:
+			asp.volume_db = _calculate_db(_layer_volumes[i] * _volume)
+		i += 1
+
+
+func _apply_layer_volume(layer: int) -> void:
+	var asp: AudioStreamPlayer = get_node(_track.name).get_children()[layer]
+	asp.volume_db = _calculate_db(_layer_volumes[layer] * _volume)
+	pass
