@@ -25,7 +25,7 @@ func _change_track(track_name):
 	_music_player.load_track(track_name, volume_slider.value)
 
 	# Something
-	for i in range(_music_player.get_layer_count()):
+	for i in range(_music_player.get_current_track().get_layer_count()):
 		var cb: CheckBox = CheckBox.new()
 		cb.name = str(i)
 		cb.button_pressed = true
@@ -52,8 +52,8 @@ func _on_volume_slider_drag_ended(_value_changed):
 
 func _process(_delta):
 	if _dragging:
-		if _music_player.get_child_count():
-			_music_player.set_volume(volume_slider.value)
+		if _music_player.get_current_track():
+			_music_player.get_current_track().volume = volume_slider.value
 	pass
 
 func _on_volume_slider_drag_started():
@@ -61,4 +61,4 @@ func _on_volume_slider_drag_started():
 
 
 func _on_fade_pressed():
-	$MusicPlayer.fade_volume($VBoxContainer/HBoxContainer2/FadeVolumeSpinBox.value, 1.0)
+	$MusicPlayer.get_current_track().fade_volume($VBoxContainer/HBoxContainer2/FadeVolumeSpinBox.value, 1.0)

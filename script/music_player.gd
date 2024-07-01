@@ -1,9 +1,7 @@
 extends Node
 class_name MusicPlayer
 
-const PATH_TO_MUSIC: String = "res://asset/music/"
 const PATH_TO_TRACKLIST: String = "res://tracklist.json"
-const MUSIC_PLAYER_BUS: String = "Music"
 
 # 0.0 --------------------- 1.0
 #  ^                         ^
@@ -12,22 +10,10 @@ const MUSIC_PLAYER_BUS: String = "Music"
 const MAX_DB = 0.0
 const MIN_DB = -80.0
 
-
-class TrackInfo:
-	var name: String
-	var layer_count: int
-	var stream: Array
-
-
 ### The tracklist for the current project
 var tracklist: Dictionary
 
-var _track: TrackInfo
-var _tracks_node: Node				# Use a node so that it can be easily cleared
-var _volume: float = 1.0
-var _layer_volumes: Array[float]
-var _tween: Tween
-var _layer_tweens: Array[Tween]
+var _current_track: Track
 
 
 func _ready():
@@ -53,107 +39,24 @@ func _ready():
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
 
 
-func _process(_delta):
-	# Apply the global volume upon tweening
-	if _tween:
-		_apply_global_volume()
-	
-	# Apply the layer volume upon tweening
-	var i = 0
-	for t: Tween in _layer_tweens:
-		if t:
-			_apply_layer_volume(i)
-		i += 1
-
-
 ### Loads the track and sets the volume of the current track
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
 func load_track(trackname: String, vol: float = 1.0) -> void:
 	if tracklist.has(trackname):
-		# Clear the entire trackspace
-		if _tracks_node != null:
-			_tracks_node.name = "__goodbye__"
-			_tracks_node.queue_free()
-		_tracks_node = Node.new()
-
-		# Initialize private variables dedicated for playback
-		_track = tracklist[trackname]
-		_tracks_node.name = _track.name
-		_volume = vol
-		_layer_volumes.clear()
-		_layer_volumes.resize(_track.layer_count)
-		_layer_volumes.fill(1.0)
-		_layer_tweens.clear()
-		_layer_tweens.resize(_track.layer_count)
-
-		# Create the nodes of AudioStreamPlayers
-		var i = 0
-		for s in _track.stream:
-			var asp: AudioStreamPlayer = AudioStreamPlayer.new()
-			asp.name = trackname + "#" + str(i)
-			asp.stream = load(PATH_TO_MUSIC + _track.stream[i])
-			asp.bus = MUSIC_PLAYER_BUS
-			asp.autoplay = true			# REMOVE THIS!!!
-			asp.volume_db = _calculate_db(_layer_volumes[i] * vol)
-			_tracks_node.add_child(asp)
-			i += 1
-		add_child(_tracks_node)
-	return
+		if _current_track:
+			_current_track.name = '__goodbye__'
+			_current_track.queue_free()
+		
+		# Get the track info, create the track node, and add it to the scene tree
+		var ti = tracklist[trackname]
+		var t: Track = Track.new()
+		t.name = ti.name
+		t.track_info = ti
+		t.volume = vol
+		add_child(t)
+		_current_track = t
 
 
-### Sets the volume of the whole track to the normalized float
-#	volume: How loud should the current track be
-func set_volume(vol: float) -> void:
-	_volume = vol
-	_apply_global_volume()
-
-
-### Sets the volume of a layer to the normalized float
-#	layer: Which layer to change the volume
-#	volume: How loud should the current layer be
-func set_layer_volume(layer: int, vol: float) -> void:
-	_layer_volumes[layer] = vol
-	_apply_layer_volume(layer)
-
-
-func fade_volume(vol: float, duration: float = 1.0) -> void:
-	if duration > 0.0:
-		if _tween:
-			_tween.kill()
-		_tween = create_tween()
-		_tween.tween_property(self, "_volume", vol, duration)
-	else:
-		set_volume(vol)
-
-
-func get_current_track() -> TrackInfo:
-	return _track
-
-
-func get_layer_count() -> int:
-	return _track.layer_count
-	
-
-#########################################################################################
-#
-#	Private functions
-#
-
-
-func _calculate_db(normal_volume: float) -> float:	
-	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/5.0))
-
-
-func _apply_global_volume() -> void:
-	var i = 0
-	for asp in get_node(_track.name).get_children():
-		if asp is AudioStreamPlayer:
-			asp.volume_db = _calculate_db(_layer_volumes[i] * _volume)
-		i += 1
-
-
-func _apply_layer_volume(layer: int) -> void:
-	var asp: AudioStreamPlayer = get_node(_track.name).get_children()[layer]
-	asp.volume_db = _calculate_db(_layer_volumes[layer] * _volume)
-	pass
+func get_current_track() -> Track:
+	return _current_track
