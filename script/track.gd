@@ -17,7 +17,7 @@ var volume: float = 1.0
 var _layers: Array[AudioStreamPlayer]
 var _layer_volumes: Array[float]
 var _tween: Tween
-var _layer_tween: Tween
+var _layer_tweens: Array[Tween]
 
 var playing: bool = false
 var stream_paused: bool = false
@@ -25,9 +25,12 @@ var stream_paused: bool = false
 
 func _ready():
 	if track_info:
+		# Initialize any layers
 		_layers.resize(track_info.layer_count)
 		_layer_volumes.resize(track_info.layer_count)
 		_layer_volumes.fill(1.0)
+		_layer_tweens.resize(track_info.layer_count)
+
 		# Create the nodes of AudioStreamPlayers
 		var i = 0
 		for s in track_info.stream:
@@ -88,6 +91,16 @@ func fade_volume(vol: float, duration: float = 1.0) -> void:
 		_tween.tween_property(self, "volume", vol, duration)
 	else:
 		volume = vol
+
+
+func fade_layer_volume(layer: int, vol: float, duration: float = 1.0) -> void:
+	if duration > 0.0:
+		if _layer_tweens[layer]:
+			_layer_tweens[layer].kill()
+		_layer_tweens[layer] = create_tween()
+		_layer_tweens[layer].tween_property(self, "_layer_volumes[layer]", vol, duration)
+	else:
+		_layer_volumes[layer] = vol
 
 
 func fade_out(duration: float = 1.0, free: bool = false) -> void:
