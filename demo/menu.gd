@@ -21,9 +21,7 @@ func _change_track(track_name):
 	lg.name = "LayerGrid"
 
 	# Load and play the track
-	_music_player.unload_track()
-	_music_player.load_track(track_name, volume_slider.value)
-	_music_player.play()
+	_music_player.load_track(track_name, volume_slider.value, true)
 
 	# Something
 	for i in range(_music_player.get_current_track().get_layer_count()):
@@ -63,3 +61,15 @@ func _on_volume_slider_drag_started():
 
 func _on_fade_pressed():
 	$MusicPlayer.get_current_track().fade_volume($VBoxContainer/HBoxContainer2/FadeVolumeSpinBox.value, 1.0)
+
+
+func _on_play_pressed():
+	$MusicPlayer.play()
+
+
+func _on_stop_pressed():
+	$MusicPlayer.stop()
+
+
+func _on_pause_pressed():
+	$MusicPlayer.pause()

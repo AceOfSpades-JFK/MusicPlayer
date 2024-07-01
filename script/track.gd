@@ -63,6 +63,11 @@ func stop() -> void:
 		c.stop()
 
 
+func pause() -> void:
+	for c: AudioStreamPlayer in get_children():
+		c.stream_paused = !c.stream_paused
+
+
 ### Sets the volume of a layer to the normalized float
 #	layer: Which layer to change the volume
 #	volume: How loud should the current layer be

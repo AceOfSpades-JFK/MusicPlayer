@@ -42,8 +42,10 @@ func _ready():
 ### Loads the track with the provided volume and sets it as the current track
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
-func load_track(trackname: String, vol: float = 1.0) -> void:
+#	autoplay: Should the track play upon loading (default is false)
+func load_track(trackname: String, vol: float = 1.0, autoplay: bool = false) -> void:
 	if tracklist.has(trackname):
+		unload_track()
 		# Get the track info, create the track node, and add it to the scene tree
 		var ti = tracklist[trackname]
 		var t: Track = Track.new()
@@ -52,8 +54,11 @@ func load_track(trackname: String, vol: float = 1.0) -> void:
 		t.volume = vol
 		add_child(t)
 		_current_track = t
+		if autoplay:
+			_current_track.play()
 
 
+### Unloads the current track.
 func unload_track() -> void:
 	var t: Track = _get_track("")
 	if t:
@@ -63,12 +68,21 @@ func unload_track() -> void:
 		t.queue_free()
 
 
+### Plays the current track from the beginning.
 func play() -> void:
 	var t: Track = _get_track("")
 	if t:
 		t.play()
 
 
+### Pauses playback of the current track.
+func pause() -> void:
+	var t: Track = _get_track("")
+	if t:
+		t.pause()
+
+
+### Stops the playback of the current track
 func stop() -> void:
 	var t: Track = _get_track("")
 	if t:

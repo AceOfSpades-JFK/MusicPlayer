@@ -66,6 +66,21 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Play" type="Button" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Play"
+
+[node name="Stop" type="Button" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Stop"
+
+[node name="Pause" type="Button" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Pause"
+
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Layers:"
@@ -75,3 +90,6 @@ text = "Layers:"
 [connection signal="drag_ended" from="VBoxContainer/HBoxContainer/VolumeSlider" to="." method="_on_volume_slider_drag_ended"]
 [connection signal="drag_started" from="VBoxContainer/HBoxContainer/VolumeSlider" to="." method="_on_volume_slider_drag_started"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/Fade" to="." method="_on_fade_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/Stop" to="." method="_on_stop_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/Pause" to="." method="_on_pause_pressed"]
