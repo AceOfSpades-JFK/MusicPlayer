@@ -45,48 +45,75 @@ func _ready():
 #	autoplay: Should the track play upon loading (default is false)
 func load_track(trackname: String, vol: float = 1.0, autoplay: bool = false) -> void:
 	if tracklist.has(trackname):
-		unload_track()
-		# Get the track info, create the track node, and add it to the scene tree
-		var ti = tracklist[trackname]
-		var t: Track = Track.new()
-		t.name = ti.name
-		t.track_info = ti
-		t.volume = vol
+		if _current_track && _current_track.name == trackname:
+			# Ignore if the provided track is already the thing
+			print("Track (" + trackname + ") is already loaded!")
+		else:
+			# Unload the current track
+			unload_track()
+
+			# Create the track node
+			var t: Track = _create_track_node(trackname)
+			t.volume = vol
+
+			# Add the newly created track to the scene tree, and set it as the current track
+			add_child(t)
+			if autoplay: t.play()
+			_current_track = t
+	
+
+### Fades the current track to a new track
+#	trackname: Name of the track to fade to
+#	vol: Volume to fade the new track to
+#	duration: How long the track should fade
+func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -> void:
+	# Fade out the old track
+	if _current_track:
+		# Return if the provided trackname is the current track!
+		if _current_track.name == trackname:
+			print("Track (" + trackname + ") is already loaded!")
+			return
+		
+		# Fade the previous track out
+		_current_track.fade_out(duration, true)
+		_current_track.name = '__goodbye__'
+
+	# Create a new track that fades in
+	if tracklist.has(trackname):
+		var t: Track = _create_track_node(trackname)
+		t.volume = 0.0
+
+		# Add the newly created track to the scene tree, and set it as the current track
 		add_child(t)
+		t.play()
+		t.fade_volume(vol, duration)
 		_current_track = t
-		if autoplay:
-			_current_track.play()
 
 
 ### Unloads the current track.
 func unload_track() -> void:
-	var t: Track = _get_track("")
-	if t:
-		if t == _current_track:
-			_current_track = null
-		t.name = '__goodbye__'
-		t.queue_free()
+	if _current_track:
+		_current_track.name = '__goodbye__'
+		_current_track.queue_free()
+		_current_track = null
 
 
 ### Plays the current track from the beginning.
 func play() -> void:
-	var t: Track = _get_track("")
-	if t:
-		t.play()
+	if _current_track:
+		_current_track.play()
 
 
 ### Pauses playback of the current track.
 func pause() -> void:
-	var t: Track = _get_track("")
-	if t:
-		t.pause()
+	if _current_track:
+		_current_track.pause()
 
 
 ### Stops the playback of the current track
 func stop() -> void:
-	var t: Track = _get_track("")
-	if t:
-		t.stop()
+	if _current_track:
+		_current_track.stop()
 
 
 func get_current_track() -> Track:
@@ -106,3 +133,12 @@ func _get_track(trackname: String) -> Track:
 	else:
 		printerr("Track (" + trackname + ") is not currently loaded!")
 		return null
+
+
+func _create_track_node(trackname: String) -> Track:
+	# Get the track info, create the track node, and add it to the scene tree
+	var ti = tracklist[trackname]
+	var t: Track = Track.new()
+	t.name = ti.name
+	t.track_info = ti
+	return t

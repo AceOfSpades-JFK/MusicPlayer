@@ -21,7 +21,7 @@ func _change_track(track_name):
 	lg.name = "LayerGrid"
 
 	# Load and play the track
-	_music_player.load_track(track_name, volume_slider.value, true)
+	_music_player.fade_to_track(track_name, volume_slider.value, 2.0)
 
 	# Something
 	for i in range(_music_player.get_current_track().get_layer_count()):
@@ -73,3 +73,6 @@ func _on_stop_pressed():
 
 func _on_pause_pressed():
 	$MusicPlayer.pause()
+
+func _on_fade_out_pressed():
+	$MusicPlayer.get_current_track().fade_out()

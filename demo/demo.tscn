@@ -81,6 +81,10 @@ text = "Stop"
 layout_mode = 2
 text = "Pause"
 
+[node name="FadeOut" type="Button" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Fade Out"
+
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Layers:"
@@ -93,3 +97,4 @@ text = "Layers:"
 [connection signal="pressed" from="VBoxContainer/HBoxContainer3/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer3/Stop" to="." method="_on_stop_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer3/Pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/FadeOut" to="." method="_on_fade_out_pressed"]
