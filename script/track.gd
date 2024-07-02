@@ -14,13 +14,10 @@ const MIN_DB = -80.0
 @export var track_info: TrackInfo
 var volume: float = 1.0
 
-var _layers: Array[AudioStreamPlayer]
 var _layer_volumes: Array[float]
 var _tween: Tween
-var _layer_tweens: Array[Tween]
-
-var playing: bool = false
-var stream_paused: bool = false
+var _playing: bool = false
+var _stream_paused: bool = false
 
 signal fade_finished
 
@@ -28,10 +25,8 @@ signal fade_finished
 func _ready():
 	if track_info:
 		# Initialize any layers
-		_layers.resize(track_info.layer_count)
 		_layer_volumes.resize(track_info.layer_count)
 		_layer_volumes.fill(1.0)
-		_layer_tweens.resize(track_info.layer_count)
 
 		# Create the nodes of AudioStreamPlayers
 		var i = 0
@@ -42,7 +37,6 @@ func _ready():
 			asp.bus = MUSIC_PLAYER_BUS
 			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
 			add_child(asp)
-			_layers[i] = asp
 			i += 1
 	else:
 		printerr("No track info found!")
@@ -50,31 +44,34 @@ func _ready():
 
 
 func _process(_delta):
-	# Apply the global volume
+	# Apply the global and layer volumes
 	_apply_volume()
 
 
+### Plays each of the layers of the track
 func play() -> void:
 	for c: AudioStreamPlayer in get_children():
 		c.play()
-	playing = true
-	stream_paused = false
+	_playing = true
+	_stream_paused = false
 
 
+### Stops playback of each layer of the track
 func stop() -> void:
 	for c: AudioStreamPlayer in get_children():
 		c.stop()
-	playing = false
-	stream_paused = false
+	_playing = false
+	_stream_paused = false
 
 
+### Pauses playback of the track layers
 func pause() -> void:
 	for c: AudioStreamPlayer in get_children():
-		c.stream_paused = !c.stream_paused
-	stream_paused = !stream_paused
+		c._stream_paused = !c._stream_paused
+	_stream_paused = !_stream_paused
 
 
-### Sets the volume of a layer to the normalized float
+### Sets the volume of a layer to the provided normalized float volume
 #	layer: Which layer to change the volume
 #	volume: How loud should the current layer be
 func set_layer_volume(layer: int, vol: float) -> void:
@@ -110,6 +107,16 @@ func fade_out(duration: float = 1.0) -> void:
 #	Returns: The number of layers
 func get_layer_count() -> int:
 	return track_info.layer_count
+
+### Checks if the track is currently playing
+#	Returns: A boolean to show if the track is playing
+func is_playing() -> bool:
+	return _playing
+
+### Checks if the track is currently paused
+#	Returns: A boolean to show if the track is paused
+func is_stream_paused() -> bool:
+	return _stream_paused
 	
 
 #########################################################################################
@@ -127,6 +134,7 @@ func _apply_volume() -> void:
 		if asp is AudioStreamPlayer:
 			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
 		i += 1
+
 
 func _fade_finished_emit() -> void:
 	fade_finished.emit()

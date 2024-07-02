@@ -39,7 +39,7 @@ func _ready():
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
 
 
-### Loads the track with the provided volume and sets it as the current track
+### Loads a track from tracklist.json and sets it as the current track.
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
 #	autoplay: Should the track play upon loading (default is false)
@@ -61,6 +61,8 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = false) -> 
 			add_child(t)
 			if autoplay: t.play()
 			_current_track = t
+	else:
+		printerr("Track (" + trackname + ") does not exist!")
 	
 
 ### Fades the current track to a new track
@@ -68,20 +70,20 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = false) -> 
 #	vol: Volume to fade the new track to
 #	duration: How long the track should fade
 func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -> void:
-	# Fade out the old track
-	if _current_track:
-		# Return if the provided trackname is the current track!
-		if _current_track.name == trackname:
-			print("Track (" + trackname + ") is already loaded!")
-			return
-		
-		# Fade the previous track out
-		_current_track.fade_finished.connect(_current_track.queue_free)
-		_current_track.fade_out(duration)
-		_current_track.name = '__goodbye__'
-
-	# Create a new track that fades in
 	if tracklist.has(trackname):
+		# Fade out the old track
+		if _current_track:
+			# Return if the provided trackname is the current track!
+			if _current_track.name == trackname:
+				print("Track (" + trackname + ") is already loaded!")
+				return
+			
+			# Fade the previous track out
+			_current_track.fade_finished.connect(_current_track.queue_free)
+			_current_track.fade_out(duration)
+			_current_track.name = '__goodbye__'
+
+		# Create a new track that fades in
 		var t: Track = _create_track_node(trackname)
 		t.volume = 0.0
 
@@ -90,6 +92,9 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 		t.play()
 		t.fade_volume(vol, duration)
 		_current_track = t
+		
+	else:
+		printerr("Track (" + trackname + ") does not exist!")
 
 
 ### Unloads the current track.
@@ -122,9 +127,15 @@ func stop() -> void:
 #	Returns: The current track
 func get_current_track() -> Track:
 	return _current_track
+	
+
+#########################################################################################
+#
+#	Private functions
+#
 
 
-func _get_track(trackname: String) -> Track:
+func _get_loaded_track(trackname: String) -> Track:
 	# If no track name is given, return the current track
 	if trackname.is_empty():
 		return _current_track
