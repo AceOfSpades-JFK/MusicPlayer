@@ -32,7 +32,7 @@ Once the plugin has been enabled, you can now use the Music Player by either:
 
 ## Planned features
 
-- UI to add/remove music to the tracklist
+- Editor UI to add/remove music to the tracklist
 - Track BPM and time-signatures
 - Adjust playback speed
 - Time markers
