@@ -12,12 +12,28 @@ const MAX_DB = 0.0
 const MIN_DB = -80.0
 
 @export var track_info: TrackInfo
+@export var bus: String = "Music"
 var volume: float = 1.0
 
 var _layer_volumes: Array[float]
 var _tween: Tween
-var _playing: bool = false
-var _stream_paused: bool = false
+
+var playing: bool = false :
+	set(val):
+		if val:
+			for c: AudioStreamPlayer in get_children():
+				c.play()
+		else:
+			for c: AudioStreamPlayer in get_children():
+				c.stop()
+		playing = val
+
+
+var stream_paused: bool = false :
+	set(val):
+		for c: AudioStreamPlayer in get_children():
+			c.stream_paused = val
+		stream_paused = val
 
 signal fade_finished
 
@@ -50,25 +66,17 @@ func _process(_delta):
 
 ### Plays each of the layers of the track
 func play() -> void:
-	for c: AudioStreamPlayer in get_children():
-		c.play()
-	_playing = true
-	_stream_paused = false
+	playing = true
 
 
 ### Stops playback of each layer of the track
 func stop() -> void:
-	for c: AudioStreamPlayer in get_children():
-		c.stop()
-	_playing = false
-	_stream_paused = false
+	playing = false
 
 
 ### Pauses playback of the track layers
 func pause() -> void:
-	for c: AudioStreamPlayer in get_children():
-		c._stream_paused = !c._stream_paused
-	_stream_paused = !_stream_paused
+	stream_paused = !stream_paused
 
 
 ### Sets the volume of a layer to the provided normalized float volume
@@ -111,12 +119,12 @@ func get_layer_count() -> int:
 ### Checks if the track is currently playing
 #	Returns: A boolean to show if the track is playing
 func is_playing() -> bool:
-	return _playing
+	return playing
 
 ### Checks if the track is currently paused
 #	Returns: A boolean to show if the track is paused
 func is_stream_paused() -> bool:
-	return _stream_paused
+	return stream_paused
 	
 
 #########################################################################################
@@ -125,7 +133,7 @@ func is_stream_paused() -> bool:
 #
 
 func _calculate_db(normal_volume: float) -> float:	
-	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/5.0))
+	return lerp(MIN_DB, MAX_DB, pow(normal_volume, 1.0/10.0))
 
 
 func _apply_volume() -> void:

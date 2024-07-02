@@ -2,7 +2,7 @@ extends Control
 
 var _dragging: bool = false
 @onready var volume_slider: HSlider = $VBoxContainer/HBoxContainer/VolumeSlider
-@onready var _music_player: MusicPlayer = $MusicPlayer
+@onready var _music_player: MusicPlayer = GlobalMusicPlayer
 
 func _on_regal_pressed():
 	_change_track("Regal")
@@ -40,7 +40,7 @@ func _on_checkbox_pressed():
 		var f: float = 1.0
 		if !cb.button_pressed:
 			f = 0.0
-		$MusicPlayer.get_current_track().set_layer_volume(i, f)
+		_music_player.get_current_track().set_layer_volume(i, f)
 		i += 1 
 	
 	
@@ -58,19 +58,20 @@ func _on_volume_slider_drag_started():
 
 
 func _on_fade_pressed():
-	$MusicPlayer.get_current_track().fade_volume($VBoxContainer/HBoxContainer2/FadeVolumeSpinBox.value, 1.0)
+	volume_slider.value = $VBoxContainer/HBoxContainer2/FadeVolumeSpinBox.value
+	_music_player.get_current_track().fade_volume($VBoxContainer/HBoxContainer2/FadeVolumeSpinBox.value, 1.0)
 
 
 func _on_play_pressed():
-	$MusicPlayer.play()
+	_music_player.play()
 
 
 func _on_stop_pressed():
-	$MusicPlayer.stop()
+	_music_player.stop()
 
 
 func _on_pause_pressed():
-	$MusicPlayer.pause()
+	_music_player.pause()
 
 func _on_fade_out_pressed():
-	$MusicPlayer.get_current_track().fade_out()
+	_music_player.get_current_track().fade_out()

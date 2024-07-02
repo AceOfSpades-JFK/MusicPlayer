@@ -1,6 +1,5 @@
-[gd_scene load_steps=3 format=3 uid="uid://bc7hkifihjt2d"]
+[gd_scene load_steps=2 format=3 uid="uid://bc7hkifihjt2d"]
 
-[ext_resource type="Script" path="res://script/music_player.gd" id="1_hp2wd"]
 [ext_resource type="Script" path="res://demo/menu.gd" id="1_prkl2"]
 
 [node name="Control" type="Control"]
@@ -11,9 +10,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_prkl2")
-
-[node name="MusicPlayer" type="Node" parent="."]
-script = ExtResource("1_hp2wd")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -63,7 +59,7 @@ text = "Fade"
 layout_mode = 2
 size_flags_horizontal = 3
 max_value = 1.0
-step = 0.01
+step = 0.1
 value = 1.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]

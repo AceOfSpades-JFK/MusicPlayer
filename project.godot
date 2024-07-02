@@ -14,3 +14,11 @@ config/name="MusicPlayer"
 run/main_scene="res://demo/demo.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GlobalMusicPlayer="*res://addons/music_player/script/music_player.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/music_player/plugin.cfg")

@@ -10,6 +10,9 @@ const PATH_TO_TRACKLIST: String = "res://tracklist.json"
 const MAX_DB = 0.0
 const MIN_DB = -80.0
 
+### The audio bus to use for the music
+@export var bus: String = "Music"
+
 ### The tracklist for the current project
 var tracklist: Dictionary
 
@@ -56,6 +59,7 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = false) -> 
 			# Create the track node
 			var t: Track = _create_track_node(trackname)
 			t.volume = vol
+			t.bus = bus
 
 			# Add the newly created track to the scene tree, and set it as the current track
 			add_child(t)
@@ -86,6 +90,7 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 		# Create a new track that fades in
 		var t: Track = _create_track_node(trackname)
 		t.volume = 0.0
+		t.bus = bus
 
 		# Add the newly created track to the scene tree, and set it as the current track
 		add_child(t)

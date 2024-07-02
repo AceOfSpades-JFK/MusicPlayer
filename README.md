@@ -8,13 +8,38 @@ A Godot 4.2 addon that simplifies music playback while allowing for more dynamic
   - Multiple stems for a track playing at once, allowing for music to be more dynamic
 - Simple volume control
   - You can now adjust the volume of a track (and it's layers) using a normalized float
-  - You can also fade the volume of tracks
+- Volume fading
+  - You can fade the volume of a track using built-in functions
+  - You can also cross-fade between tracks
+
+## Usage
+
+### Installation
+
+1. Download the latest relase of the project and extract its contents
+
+2. Move the `addons/music_player` folder into your project's `addons` folder
+
+3. Open/reload the project
+
+4. Enable the Music Player plugin in Project > Project Settings > Plugins
+
+Once the plugin has been enabled, you can now use the Music Player by either:
+
+- Adding a `MusicPlayer` node to your scene, or
+
+- Using the `GlobalMusicPlayer` autoload for music to play across scenes!
 
 ## Planned features
 
+- UI to add/remove music to the tracklist
 - Track BPM and time-signatures
-- Adjust playback speed?
-- Section changes
+- Adjust playback speed
+- Time markers
+- Music switching depending on time markers
+
+
+
 
 # Documentation
 
