@@ -26,7 +26,6 @@ func _ready():
 	if json.parse(content) == OK:
 		var data = json.data
 		var tracks = data["tracks"]
-		print(tracks)
 
 		# Loop through all the tracks and put them in the tracklist dictionary
 		for t in tracks:
@@ -35,6 +34,7 @@ func _ready():
 			newTrack.stream = t["stream"]
 			newTrack.layer_count = t["stream"].size()
 			tracklist[newTrack.name] = newTrack
+			
 	else:
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
 
@@ -48,6 +48,7 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = false) -> 
 		if _current_track && _current_track.name == trackname:
 			# Ignore if the provided track is already the thing
 			print("Track (" + trackname + ") is already loaded!")
+
 		else:
 			# Unload the current track
 			unload_track()
@@ -75,7 +76,8 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 			return
 		
 		# Fade the previous track out
-		_current_track.fade_out(duration, true)
+		_current_track.fade_finished.connect(_current_track.queue_free)
+		_current_track.fade_out(duration)
 		_current_track.name = '__goodbye__'
 
 	# Create a new track that fades in
@@ -116,6 +118,8 @@ func stop() -> void:
 		_current_track.stop()
 
 
+### Get the track currently playing
+#	Returns: The current track
 func get_current_track() -> Track:
 	return _current_track
 

@@ -22,6 +22,8 @@ var _layer_tweens: Array[Tween]
 var playing: bool = false
 var stream_paused: bool = false
 
+signal fade_finished
+
 
 func _ready():
 	if track_info:
@@ -50,10 +52,6 @@ func _ready():
 func _process(_delta):
 	# Apply the global volume
 	_apply_volume()
-	
-	# Apply the layer volume
-	for i in range(track_info.layer_count):
-		_apply_layer_volume(i)
 
 
 func play() -> void:
@@ -83,37 +81,34 @@ func set_layer_volume(layer: int, vol: float) -> void:
 	_layer_volumes[layer] = vol
 
 
+### Fade the volume of the current track
+#	vol: Volume to fade to
+#	duration: How long the fade should last (default is 1.0)
 func fade_volume(vol: float, duration: float = 1.0) -> void:
 	if duration > 0.0:
 		if _tween:
 			_tween.kill()
 		_tween = create_tween()
 		_tween.tween_property(self, "volume", vol, duration)
+		_tween.tween_callback(_fade_finished_emit)
 	else:
 		volume = vol
+		_fade_finished_emit()
 
 
-func fade_layer_volume(layer: int, vol: float, duration: float = 1.0) -> void:
-	if duration > 0.0:
-		if _layer_tweens[layer]:
-			_layer_tweens[layer].kill()
-		_layer_tweens[layer] = create_tween()
-		_layer_tweens[layer].tween_property(self, "_layer_volumes[layer]", vol, duration)
-	else:
-		_layer_volumes[layer] = vol
-
-
-func fade_out(duration: float = 1.0, free: bool = false) -> void:
+### Fade the current track out and stop it
+#	duration: How long the fade should last (default is 1.0)
+func fade_out(duration: float = 1.0) -> void:
 	if is_zero_approx(duration):
-		if free: queue_free()
-		else:    stop()
+		stop()
 	else:
 		fade_volume(0.0, duration)
-		if free: _tween.tween_callback(queue_free)
-		else:    _tween.tween_callback(stop)
+		_tween.tween_callback(stop)
 
 
-func get_layer_count():
+### Return how many layers there are in the track
+#	Returns: The number of layers
+func get_layer_count() -> int:
 	return track_info.layer_count
 	
 
@@ -133,8 +128,5 @@ func _apply_volume() -> void:
 			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
 		i += 1
 
-
-func _apply_layer_volume(layer: int) -> void:
-	var asp: AudioStreamPlayer = get_children()[layer]
-	asp.volume_db = _calculate_db(_layer_volumes[layer] * volume)
-	pass
+func _fade_finished_emit() -> void:
+	fade_finished.emit()

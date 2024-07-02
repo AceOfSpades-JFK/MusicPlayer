@@ -44,8 +44,6 @@ func _on_checkbox_pressed():
 		i += 1 
 	
 	
-
-
 func _on_volume_slider_drag_ended(_value_changed):
 	_dragging = false
 
