@@ -72,17 +72,23 @@ Every track comes with these pieces of information:
 
 `name`: The name of the track. Idk what else to say
 
-`stream`: What streams are associated with the track. Each stream is located in `res://asset/music`. You can change this in `track.gd`.
+`stream`: What streams are associated with the track. Each stream is located in `res://asset/music`. You can change this in `addons/music_player/script/track.gd`.
 
 ## MusicPlayer
 
 The music player node is how music can be played with only one line of code.
 
+**Properties**
+
+`bus: String`: The bus used by all the child `AudioStreamPlayer` nodes. `Music` is the default.
+
+`tracklist: Dictionary`: All of the tracks listed in tracklist.json. Each `TrackInfo` is accessible with a track's name.
+
 ### _ready()
 
 **Description:**
 
-Deserializes tracklist.json, parses every TrackInfo object, and puts each of them into a dictionary called `tracklist`, where every TrackInfo is accessable with the track's name.
+Deserializes tracklist.json, parses every TrackInfo object, and puts each of them into the `tracklist` dictionary.
 
 ### load_track()
 
@@ -157,6 +163,10 @@ An instance of music with multiple layers playing simultaneously.
 `track_info: TrackInfo`: The info of the track
 
 `volume: float`: How loud the track is
+
+`playing: bool`: Whether or not the track and its layers are playing.
+
+`stream_paused: bool`: Whether or not the track and its layers are paused.
 
 `fade_finished: signal`: Emitted when a volume fade for the track is finished.
 
