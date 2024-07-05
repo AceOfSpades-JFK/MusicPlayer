@@ -14,13 +14,15 @@ A Godot 4.2 addon that simplifies music playback while allowing for more dynamic
 
 ## Installation
 
-1. Download the latest relase of the project and extract its contents
+1. Download the latest relase of the project and extract its contents.
 
-2. Move the `addons/music_player` folder into your project's `addons` folder
+2. Move the `addons/music_player` folder into your project's `addons` folder.
 
-3. Open/reload the project
+3. Move `tracklist.json` into your project's root folder. You can make any changes to 
 
-4. Enable the Music Player plugin in Project > Project Settings > Plugins
+4. Open/reload the project.
+
+5. Enable the Music Player plugin in Project > Project Settings > Plugins.
 
 Once the plugin has been enabled, you can now use the Music Player by either:
 
@@ -32,11 +34,15 @@ Once the plugin has been enabled, you can now use the Music Player by either:
 
 Loading and playing a song can be as simple as just typing this:
 
-    GlobalMusicPlayer.load_track(track_name, 1.0, true)
+    GlobalMusicPlayer.load_track(track_name)
 
-This snippet of code loads the track and plays it at full loudness after loading!
+Given a track's name as referenced in `tracklist.json`, this snippet of code loads the track and plays it at full loudness after loading!
 
-Fading the volume can be done with just:
+If you want to make some modifications to the track, like setting the volume of the track or its layers, you can get the current track by just calling:
+
+    GlobalMusicPlayer.get_current_track()
+
+Given a music track, you can do things like fading the volume:
 
     GlobalMusicPlayer.get_current_track().fade_volume(0.5)
 
@@ -48,24 +54,9 @@ Maybe you're done with a track and want to fade-transition to another. Just type
 
 and for 2 seconds, the previous track fades out and gets unloaded. The new track loads, plays, and then fades in to full volume.
 
-## Planned features
+### Tracklist
 
-- Editor UI to add/remove music to the tracklist
-- Track BPM and time-signatures
-- Adjust playback speed
-- Time markers
-- Music switching depending on time markers
-
-
-
-
-# Documentation
-
-This section explains how to work with the MusicPlayer.
-
-## tracklist.json
-
-This file should be located in the root of the project folder. Here is an example of a tracklist:
+`tracklist.json` should be located in the root of the project folder. Here is an example of a tracklist:
 
     {
         "tracks": [
@@ -92,200 +83,10 @@ Every track comes with these pieces of information:
 
 `stream`: What streams are associated with the track. Each stream is located in `res://asset/music`. You can change this in `addons/music_player/script/track.gd`.
 
-## MusicPlayer
-
-The music player node is how music can be played with only one line of code.
-
-**Properties**
-
-`bus: String`: The bus used by all the child `AudioStreamPlayer` nodes. `Music` is the default.
-
-`tracklist: Dictionary`: All of the tracks listed in tracklist.json. Each `TrackInfo` is accessible with a track's name.
-
-### _ready()
-
-**Description:**
-
-Deserializes tracklist.json, parses every TrackInfo object, and puts each of them into the `tracklist` dictionary.
-
-### load_track()
-
-**Description:**
-
-Loads a track from tracklist.json and sets it as the current track.
-
-**Parameters:**
-
-`trackname: String`: The name of the track as named in tracklist.json.
-
-`vol: float`: The starting volume of the track. Default is 1.0.
-
-`autoplay: bool`: Set it to true should the track play upon loading. Default is false.
-
-### unload_track()
-
-**Description:**
-
-Unloads the current track and removes it from the scene tree.
-
-### fade_to_track()
-
-**Description:**
-
-Do a fade transition from the current track to the new track. The new track gets set as the new current track and plays automatically.
-
-**Parameters:**
-
-`trackname`: The name of the track as named in tracklist.json.
-
-`vol`: The starting volume of the track. Default is 1.0.
-
-`duration`: How long the fade should last.
-
-### play()
-
-**Description:**
-
-Plays the current track from the beginning.
-
-### pause()
-
-**Description:**
-
-Pauses or unpauses playback of the current track.
-
-### stop()
-
-**Description:**
-
-Stops any playback of the current track.
-
-### get_current_track() -> Track
-
-**Description:**
-
-Gets the track currently being used.
-
-**Returns:**
-
-The node of the current track.
-
-
-
-## Track
-
-An instance of music with multiple layers playing simultaneously.
-
-**Properties:**
-
-`track_info: TrackInfo`: The info of the track
-
-`volume: float`: How loud the track is
-
-`playing: bool`: Whether or not the track and its layers are playing.
-
-`stream_paused: bool`: Whether or not the track and its layers are paused.
-
-`fade_finished: signal`: Emitted when a volume fade for the track is finished.
-
-### _ready()
-
-**Description:**
-
-Upon ready, the track should be provided a TrackInfo resource. If it exists, then the node should create the AudioStreamPlayer nodes for each of the individual layers.
-
-### play()
-
-**Description:**
-
-Plays all of the layers that are children of the track.
-
-### pause()
-
-**Description:**
-
-Pauses playback of the layers of the track.
-
-### stop()
-
-**Description:**
-
-Stops all playback of the layers of the track.
-
-### set_layer_volume()
-
-**Description:**
-
-Sets the volume of a specific layer to the provided normalized float volume.
-
-**Parameters:**
-
-`layer: int`: The layer index to change the volume.
-
-`vol: float`: The normalized volume level to set for the specified layer.
-
-### fade_volume()
-
-**Description:**
-
-Fades the volume of the current track to the specified volume over the given duration. If `duration` is 0, then the volume is instantly set to `vol`.
-
-**Parameters:**
-
-`vol: float`: The target volume to fade to.
-
-`duration: float`: The duration of the fade (default is 1.0).
-
-### fade_out()
-
-**Description:**
-
-Fades the volume of the current track out to 0 and then stops it. If the duration is approximately zero, it stops immediately.
-
-**Parameters:**
-
-`duration: float`: The duration of the fade out (default is 1.0).
-
-### get_layer_count() -> int
-
-**Description:**
-
-Returns the number of layers in the track.
-
-**Returns:**
-
-An integer representing the number of layers.
-
-### is_playing() -> bool
-
-**Description:**
-
-Checks if the track is currently playing.
-
-**Returns:**
-
-Returns true if the track is playing. False if not.
-
-### is_stream_paused() -> bool
-
-**Description:**
-
-Checks if the track is currently paused.
-
-**Returns:**
-
-Returns true if the track is paused. False if not.
-
-
-
-## TrackInfo
-
-A resource that contains information on a track.
-
-**Properties:**
-
-`name: String`: The name of the track
-
-`layer_count: int`: How many layers play in this track
-
-`stream: Array[String]`: An array of paths to each of the layers
+## Planned features
+
+- Editor UI to add/remove music to the tracklist
+- Track BPM and time-signatures
+- Adjust playback speed
+- Time markers
+- Music switching depending on time markers

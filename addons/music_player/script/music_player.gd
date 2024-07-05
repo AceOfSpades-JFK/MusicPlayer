@@ -45,8 +45,8 @@ func _ready():
 ### Loads a track from tracklist.json and sets it as the current track.
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
-#	autoplay: Should the track play upon loading (default is false)
-func load_track(trackname: String, vol: float = 1.0, autoplay: bool = false) -> void:
+#	autoplay: Should the track play upon loading (default is true)
+func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> void:
 	if tracklist.has(trackname):
 		if _current_track && _current_track.name == trackname:
 			# Ignore if the provided track is already the thing
