@@ -12,9 +12,7 @@ A Godot 4.2 addon that simplifies music playback while allowing for more dynamic
   - You can fade the volume of a track using built-in functions
   - You can also cross-fade between tracks
 
-## Usage
-
-### Installation
+## Installation
 
 1. Download the latest relase of the project and extract its contents
 
@@ -29,6 +27,26 @@ Once the plugin has been enabled, you can now use the Music Player by either:
 - Adding a `MusicPlayer` node to your scene, or
 
 - Using the `GlobalMusicPlayer` autoload for music to play across scenes!
+
+## Usage
+
+Loading and playing a song can be as simple as just typing this:
+
+    GlobalMusicPlayer.load_track(track_name, 1.0, true)
+
+This snippet of code loads the track and plays it at full loudness after loading!
+
+Fading the volume can be done with just:
+
+    GlobalMusicPlayer.get_current_track().fade_volume(0.5)
+
+This will fade the volume to half loudness for just 1 second.
+
+Maybe you're done with a track and want to fade-transition to another. Just type:
+
+    GlobalMusicPlayer.fade_to_track(track_name, 1.0, 2.0)
+
+and for 2 seconds, the previous track fades out and gets unloaded. The new track loads, plays, and then fades in to full volume.
 
 ## Planned features
 
