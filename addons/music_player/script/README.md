@@ -146,6 +146,20 @@ Fades the volume of the current track to the specified volume over the given dur
 
 `duration: float`: The duration of the fade (default is 1.0).
 
+### fade_layer_volume();
+
+**Description:**
+
+Fades the volume of the specified layer to the specified volume over the given duration. If `duration` is 0, then the volume is instantly set to `vol`.
+
+**Parameters:**
+
+`layer: int`: The layer index to change the volume.
+
+`vol: float`: The target volume to fade to.
+
+`duration: float`: The duration of the fade (default is 1.0).
+
 ### fade_out()
 
 **Description:**
