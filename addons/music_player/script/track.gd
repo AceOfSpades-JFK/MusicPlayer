@@ -176,8 +176,3 @@ func _apply_volume() -> void:
 
 func _fade_finished_emit() -> void:
 	fade_finished.emit()
-
-
-func _fade_layer_finished_emit(layer: int, vol: float) -> void:
-	_layer_volumes[layer] = vol
-	fade_finished.emit()
