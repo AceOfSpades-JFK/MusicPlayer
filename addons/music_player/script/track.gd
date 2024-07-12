@@ -13,10 +13,15 @@ const MIN_DB = -80.0
 
 @export var track_info: TrackInfo
 @export var bus: String = "Music"
-var volume: float = 1.0
+var volume: float = 1.0 :
+	set(val):
+		volume = val
+		_apply_volume()
+
 
 var _layer_volumes: Array[float]
 var _tween: Tween
+var _layer_tweens: Array[Tween]
 
 var playing: bool = false :
 	set(val):
@@ -43,6 +48,7 @@ func _ready():
 		# Initialize any layers
 		_layer_volumes.resize(track_info.layer_count)
 		_layer_volumes.fill(1.0)
+		_layer_tweens.resize(track_info.layer_count)
 
 		# Create the nodes of AudioStreamPlayers
 		var i = 0
@@ -61,7 +67,8 @@ func _ready():
 
 func _process(_delta):
 	# Apply the global and layer volumes
-	_apply_volume()
+	if _tween.is_running():
+		_apply_volume()
 
 
 ### Plays each of the layers of the track
@@ -84,6 +91,7 @@ func pause() -> void:
 #	volume: How loud should the current layer be
 func set_layer_volume(layer: int, vol: float) -> void:
 	_layer_volumes[layer] = vol
+	_apply_volume()
 
 
 ### Fade the volume of the current track
@@ -93,11 +101,33 @@ func fade_volume(vol: float, duration: float = 1.0) -> void:
 	if duration > 0.0:
 		if _tween:
 			_tween.kill()
+		for t: Tween in _layer_tweens:
+			if t:
+				t.kill()
 		_tween = create_tween()
 		_tween.tween_property(self, "volume", vol, duration)
 		_tween.tween_callback(_fade_finished_emit)
 	else:
 		volume = vol
+		_apply_volume()
+		_fade_finished_emit()
+
+
+### Fade the volume of the given layer
+#	layer: Which layer to fade
+#	vol: Volume to fade to
+#	duration: How long the fade should last (default is 1.0)
+func fade_layer_volume(layer: int, vol: float, duration: float = 1.0) -> void:
+	_layer_volumes[layer] = vol
+	if duration > 0.0:
+		if _layer_tweens[layer]:
+			_layer_tweens[layer].kill()
+		_layer_tweens[layer] = create_tween()
+		_layer_tweens[layer].set_trans(Tween.TRANS_CIRC)
+		_layer_tweens[layer].tween_property(get_child(layer), "volume_db", _calculate_db(vol * volume), duration)
+		_layer_tweens[layer].tween_callback(_fade_finished_emit)
+	else:
+		_apply_volume()
 		_fade_finished_emit()
 
 
@@ -145,4 +175,9 @@ func _apply_volume() -> void:
 
 
 func _fade_finished_emit() -> void:
+	fade_finished.emit()
+
+
+func _fade_layer_finished_emit(layer: int, vol: float) -> void:
+	_layer_volumes[layer] = vol
 	fade_finished.emit()
