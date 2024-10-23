@@ -16,29 +16,31 @@ const MIN_DB = -80.0
 var volume: float = 1.0 :
 	set(val):
 		volume = val
-		_apply_volume()
+		if (_stream):
+			_stream.volume_db = _calculate_db(val)
 
 
+var _stream: AudioStreamPlayer
+var _streamlist: AudioStreamSynchronized
 var _layer_volumes: Array[float]
 var _tween: Tween
 var _layer_tweens: Array[Tween]
 
 var playing: bool = false :
 	set(val):
-		if val:
-			for c: AudioStreamPlayer in get_children():
-				c.play()
-		else:
-			for c: AudioStreamPlayer in get_children():
-				c.stop()
 		playing = val
+		if _stream:
+			if val:
+				_stream.play()
+			else:
+				_stream.stop()
 
 
 var stream_paused: bool = false :
 	set(val):
-		for c: AudioStreamPlayer in get_children():
-			c.stream_paused = val
 		stream_paused = val
+		if _stream:
+			_stream.stream_paused = val
 
 signal fade_finished
 
@@ -50,25 +52,31 @@ func _ready():
 		_layer_volumes.fill(1.0)
 		_layer_tweens.resize(track_info.layer_count)
 
-		# Create the nodes of AudioStreamPlayers
+		# Create the AudioStreamPlayer node
+		_stream = AudioStreamPlayer.new()
+		_stream.name = track_info.name
+		_stream.bus = MUSIC_PLAYER_BUS
+		add_child(_stream)
+
+		# Create the AudioStreamSynchronized streamlist
 		var i = 0
+		_streamlist = AudioStreamSynchronized.new()
+		_streamlist.stream_count = track_info.stream.size()
+		_stream.stream = _streamlist
 		for s in track_info.stream:
-			var asp: AudioStreamPlayer = AudioStreamPlayer.new()
-			asp.name = track_info.name + "#" + str(i)
-			asp.stream = load(PATH_TO_MUSIC + track_info.stream[i])
-			asp.bus = MUSIC_PLAYER_BUS
-			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
-			add_child(asp)
+			var stream = load(PATH_TO_MUSIC + track_info.stream[i])
+			_streamlist.set_sync_stream(i, stream)
+			_streamlist.set_sync_stream_volume(i, _calculate_db(_layer_volumes[i]))
 			i += 1
 	else:
 		printerr("No track info found!")
 		queue_free()
 
 
-func _process(_delta):
-	# Apply the global and layer volumes
-	if _tween.is_running():
-		_apply_volume()
+# func _process(_delta):
+# 	# Apply the global and layer volumes
+# 	if _tween.is_running():
+# 		_apply_volume()
 
 
 ### Plays each of the layers of the track
@@ -90,8 +98,8 @@ func pause() -> void:
 #	layer: Which layer to change the volume
 #	volume: How loud should the current layer be
 func set_layer_volume(layer: int, vol: float) -> void:
+	_stream.stream.set_sync_stream_volume(layer, _calculate_db(vol))
 	_layer_volumes[layer] = vol
-	_apply_volume()
 
 
 ### Fade the volume of the current track
@@ -106,11 +114,11 @@ func fade_volume(vol: float, duration: float = 1.0) -> void:
 				t.kill()
 		_tween = create_tween()
 		_tween.tween_property(self, "volume", vol, duration)
-		_tween.tween_callback(_fade_finished_emit)
+		_tween.tween_property(_stream, "volume_db", _calculate_db(vol), duration)
+		_tween.tween_callback(fade_finished.emit)
 	else:
 		volume = vol
-		_apply_volume()
-		_fade_finished_emit()
+		fade_finished.emit()
 
 
 ### Fade the volume of the given layer
@@ -118,17 +126,18 @@ func fade_volume(vol: float, duration: float = 1.0) -> void:
 #	vol: Volume to fade to
 #	duration: How long the fade should last (default is 1.0)
 func fade_layer_volume(layer: int, vol: float, duration: float = 1.0) -> void:
-	_layer_volumes[layer] = vol
-	if duration > 0.0:
-		if _layer_tweens[layer]:
-			_layer_tweens[layer].kill()
-		_layer_tweens[layer] = create_tween()
-		_layer_tweens[layer].set_trans(Tween.TRANS_CIRC)
-		_layer_tweens[layer].tween_property(get_child(layer), "volume_db", _calculate_db(vol * volume), duration)
-		_layer_tweens[layer].tween_callback(_fade_finished_emit)
-	else:
-		_apply_volume()
-		_fade_finished_emit()
+	# _layer_volumes[layer] = vol
+	# if duration > 0.0:
+	# 	if _layer_tweens[layer]:
+	# 		_layer_tweens[layer].kill()
+	# 	_layer_tweens[layer] = create_tween()
+	# 	_layer_tweens[layer].set_trans(Tween.TRANS_CIRC)
+	# 	_layer_tweens[layer].tween_property(_stream.stream, "volume_db", _calculate_db(vol * volume), duration)
+	# 	_layer_tweens[layer].tween_callback(fade_finished.emit)
+	# else:
+	# 	_apply_volume()
+	# 	fade_finished.emit()
+	pass
 
 
 ### Fade the current track out and stop it
@@ -167,12 +176,4 @@ func _calculate_db(normal_volume: float) -> float:
 
 
 func _apply_volume() -> void:
-	var i = 0
-	for asp in get_children():
-		if asp is AudioStreamPlayer:
-			asp.volume_db = _calculate_db(_layer_volumes[i] * volume)
-		i += 1
-
-
-func _fade_finished_emit() -> void:
-	fade_finished.emit()
+	pass
