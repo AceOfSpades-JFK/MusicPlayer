@@ -40,7 +40,7 @@ func _on_checkbox_pressed():
 		var f: float = 1.0
 		if !cb.button_pressed:
 			f = 0.0
-		_music_player.get_current_track().fade_layer_volume(i, f)
+		_music_player.get_current_track().set_layer_volume(i, f)
 		i += 1 
 	
 	
