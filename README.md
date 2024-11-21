@@ -1,6 +1,6 @@
 # MusicPlayer
 
-A Godot 4.2 addon that simplifies music playback while allowing for more dynamic music.
+A Godot 4.3 addon that simplifies music playback while allowing for more dynamic music.
 
 ## Features
 
@@ -90,3 +90,7 @@ Every track comes with these pieces of information:
 - Adjust playback speed
 - Time markers
 - Music switching depending on time markers
+
+## Like what you see?
+
+Consider supporting me on [Ko-fi!](https://ko-fi.com/miguelisreal2401)
