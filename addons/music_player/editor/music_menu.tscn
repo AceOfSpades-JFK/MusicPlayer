@@ -1,0 +1,253 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjce1r2qed8px"]
+
+[sub_resource type="GDScript" id="GDScript_jlnta"]
+script/source = "@tool
+extends Button
+
+
+func _on_pressed() -> void:
+	print(\"Hello from the main screen plugin!\")
+"
+
+[node name="MusicMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SplitContainer" type="SplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = -1000
+
+[node name="Tracklist" type="MarginContainer" parent="SplitContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="ScrollContainer" parent="SplitContainer/Tracklist"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Tracklist/CenterContainer"]
+layout_mode = 2
+
+[node name="Hello" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello2" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello3" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello4" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello5" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello6" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello7" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello8" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello9" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello10" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello11" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello12" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello13" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello14" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello15" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello16" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello17" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello18" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello19" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello20" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello21" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello22" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello23" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello24" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello25" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello26" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello27" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="Hello28" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[node name="WorkArea" type="MarginContainer" parent="SplitContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="SplitContainer/WorkArea"]
+layout_mode = 2
+
+[node name="Hello" type="Button" parent="SplitContainer/WorkArea/CenterContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Hello!"
+script = SubResource("GDScript_jlnta")
+
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello2" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello2" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello3" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello3" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello4" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello4" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello5" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello5" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello6" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello6" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello7" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello7" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello8" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello8" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello9" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello9" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello10" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello10" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello11" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello11" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello12" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello12" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello13" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello13" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello14" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello14" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello15" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello15" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello16" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello16" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello17" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello17" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello18" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello18" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello19" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello19" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello20" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello20" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello21" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello21" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello22" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello22" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello23" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello23" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello24" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello24" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello25" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello25" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello26" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello26" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello27" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello27" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello28" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello28" method="_on_pressed"]
+[connection signal="pressed" from="SplitContainer/WorkArea/CenterContainer/Hello" to="SplitContainer/WorkArea/CenterContainer/Hello" method="_on_pressed"]
