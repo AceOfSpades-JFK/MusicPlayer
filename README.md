@@ -1,6 +1,6 @@
 # MusicPlayer
 
-A Godot 4.3 addon that simplifies music playback while allowing for more dynamic music.
+A Godot 4.3 addon that simplifies global music playback while allowing for more dynamic music.
 
 ## Features
 
