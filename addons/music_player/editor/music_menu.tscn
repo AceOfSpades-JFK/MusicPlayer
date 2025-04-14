@@ -1,4 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjce1r2qed8px"]
+[gd_scene load_steps=4 format=3 uid="uid://bjce1r2qed8px"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl4xw"]
+bg_color = Color(0, 0, 0, 0.129412)
 
 [sub_resource type="GDScript" id="GDScript_jlnta"]
 script/source = "@tool
@@ -8,6 +11,9 @@ extends Button
 func _on_pressed() -> void:
 	print(\"Hello from the main screen plugin!\")
 "
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6d7s"]
+bg_color = Color(0, 0, 0, 0.129412)
 
 [node name="MusicMenu" type="Control"]
 layout_mode = 3
@@ -33,16 +39,48 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CenterContainer" type="ScrollContainer" parent="SplitContainer/Tracklist"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Tracklist"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/Tracklist/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Panel" type="Panel" parent="SplitContainer/Tracklist/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rl4xw")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SplitContainer/Tracklist/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Tracklist/CenterContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/Tracklist/VBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
-[node name="Hello" type="Button" parent="SplitContainer/Tracklist/CenterContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Tracklist/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer"]
 layout_mode = 2
-size_flags_vertical = 4
-text = "Hello!"
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="SplitContainer/Tracklist/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Track Name"
+
+[node name="Meta" type="Label" parent="SplitContainer/Tracklist/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "By Artist
+4:20 | 69BPM "
+
+[node name="Hello" type="Button" parent="SplitContainer/Tracklist/VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = ">"
 script = SubResource("GDScript_jlnta")
 
 [node name="WorkArea" type="MarginContainer" parent="SplitContainer"]
@@ -50,15 +88,138 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CenterContainer" type="CenterContainer" parent="SplitContainer/WorkArea"]
+[node name="ColorRect" type="ColorRect" parent="SplitContainer/WorkArea"]
+layout_mode = 2
+color = Color(0, 0, 0, 0.12549)
+
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer"]
 layout_mode = 2
 
-[node name="Hello" type="Button" parent="SplitContainer/WorkArea/CenterContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
 layout_mode = 2
-size_flags_horizontal = 4
+
+[node name="Panel" type="Panel" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e6d7s")
+
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Label" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Controls:"
+
+[node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Play all"
+
+[node name="Button2" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Pause"
+
+[node name="Button3" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stop"
+
+[node name="HSlider" type="HSlider" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
-text = "Hello!"
-script = SubResource("GDScript_jlnta")
+step = 0.01
 
-[connection signal="pressed" from="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello" to="SplitContainer/Tracklist/CenterContainer/VBoxContainer/Hello" method="_on_pressed"]
-[connection signal="pressed" from="SplitContainer/WorkArea/CenterContainer/Hello" to="SplitContainer/WorkArea/CenterContainer/Hello" method="_on_pressed"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TrackLayerPanel" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rl4xw")
+
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="BoxContainer" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="BoxContainer" type="HBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer"]
+layout_mode = 2
+
+[node name="FileContents" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer/FileContents"]
+layout_mode = 2
+text = "filename.ogg"
+
+[node name="Meta" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer/FileContents"]
+layout_mode = 2
+text = "By Artist
+4:20 | 44100hz"
+
+[node name="ColorRect" type="ColorRect" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.136826, 0.136826, 0.136826, 1)
+
+[node name="LayerControls" type="HBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
+layout_mode = 2
+text = "Play"
+
+[node name="Button2" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
+layout_mode = 2
+text = "Pause"
+
+[node name="Button3" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
+layout_mode = 2
+text = "Stop"
+
+[node name="Control" type="Control" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MenuButton" type="MenuButton" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
+layout_mode = 2
+text = "..."
+item_count = 3
+popup/item_0/text = "Looped"
+popup/item_0/checkable = 1
+popup/item_0/checked = true
+popup/item_0/id = 2
+popup/item_1/text = "Settings"
+popup/item_1/id = 1
+popup/item_2/text = "Remove"
+popup/item_2/id = 1
+
+[node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "+ Add Layer"
+
+[connection signal="pressed" from="SplitContainer/Tracklist/VBoxContainer/MarginContainer/HBoxContainer/Hello" to="SplitContainer/Tracklist/VBoxContainer/MarginContainer/HBoxContainer/Hello" method="_on_pressed"]
