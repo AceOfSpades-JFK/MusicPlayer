@@ -1,0 +1,62 @@
+[gd_scene load_steps=3 format=3 uid="uid://beni82ibndav1"]
+
+[ext_resource type="Script" path="res://addons/music_player/editor/track_layer_panel.gd" id="1_78ls3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl4xw"]
+bg_color = Color(0, 0, 0, 0.129412)
+
+[node name="TrackLayerPanel" type="MarginContainer"]
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+script = ExtResource("1_78ls3")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rl4xw")
+
+[node name="BoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="LayerInfo" type="HBoxContainer" parent="BoxContainer"]
+layout_mode = 2
+
+[node name="FileContents" type="VBoxContainer" parent="BoxContainer/LayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="BoxContainer/LayerInfo/FileContents"]
+layout_mode = 2
+text = "filename.ogg"
+
+[node name="Meta" type="Label" parent="BoxContainer/LayerInfo/FileContents"]
+layout_mode = 2
+text = "By Artist
+4:20 | 44100hz"
+
+[node name="Waveform" type="ColorRect" parent="BoxContainer/LayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.136826, 0.136826, 0.136826, 1)
+
+[node name="LayerControls" type="HBoxContainer" parent="BoxContainer"]
+layout_mode = 2
+
+[node name="CheckBox" type="CheckBox" parent="BoxContainer/LayerControls"]
+layout_mode = 2
+text = "Mute"
+
+[node name="MenuButton" type="MenuButton" parent="BoxContainer/LayerControls"]
+layout_mode = 2
+text = "..."
+item_count = 3
+popup/item_0/text = "Looped"
+popup/item_0/checkable = 1
+popup/item_0/checked = true
+popup/item_0/id = 2
+popup/item_1/text = "Settings"
+popup/item_1/id = 1
+popup/item_2/text = "Remove"
+popup/item_2/id = 1

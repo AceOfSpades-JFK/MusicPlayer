@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjce1r2qed8px"]
+[gd_scene load_steps=5 format=3 uid="uid://bjce1r2qed8px"]
+
+[ext_resource type="PackedScene" uid="uid://beni82ibndav1" path="res://addons/music_player/editor/track_layer_panel.tscn" id="1_hkp34"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl4xw"]
 bg_color = Color(0, 0, 0, 0.129412)
@@ -146,76 +148,8 @@ step = 0.01
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TrackLayerPanel" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer"]
+[node name="TrackLayerPanel" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer" instance=ExtResource("1_hkp34")]
 layout_mode = 2
-
-[node name="Panel" type="Panel" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel"]
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_rl4xw")
-
-[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="BoxContainer" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer"]
-layout_mode = 2
-
-[node name="BoxContainer" type="HBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer"]
-layout_mode = 2
-
-[node name="FileContents" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Name" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer/FileContents"]
-layout_mode = 2
-text = "filename.ogg"
-
-[node name="Meta" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer/FileContents"]
-layout_mode = 2
-text = "By Artist
-4:20 | 44100hz"
-
-[node name="ColorRect" type="ColorRect" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/BoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-color = Color(0.136826, 0.136826, 0.136826, 1)
-
-[node name="LayerControls" type="HBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer"]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
-layout_mode = 2
-text = "Play"
-
-[node name="Button2" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
-layout_mode = 2
-text = "Pause"
-
-[node name="Button3" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
-layout_mode = 2
-text = "Stop"
-
-[node name="Control" type="Control" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MenuButton" type="MenuButton" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer/TrackLayerPanel/MarginContainer/BoxContainer/LayerControls"]
-layout_mode = 2
-text = "..."
-item_count = 3
-popup/item_0/text = "Looped"
-popup/item_0/checkable = 1
-popup/item_0/checked = true
-popup/item_0/id = 2
-popup/item_1/text = "Settings"
-popup/item_1/id = 1
-popup/item_2/text = "Remove"
-popup/item_2/id = 1
 
 [node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
