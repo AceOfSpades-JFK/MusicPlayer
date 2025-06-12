@@ -15,8 +15,10 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_8vcda")
-_track_container = NodePath("SplitContainer/Tracklist/VBoxContainer")
-_layer_container = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer")
+_track_container = NodePath("SplitContainer/Tracklist/TrackContainer")
+_layer_container = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/LayerContainer")
+_play_button = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/PlayPauseButton")
+_stop_button = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/StopButton")
 
 [node name="SplitContainer" type="SplitContainer" parent="."]
 layout_mode = 1
@@ -32,7 +34,7 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Tracklist"]
+[node name="TrackContainer" type="VBoxContainer" parent="SplitContainer/Tracklist"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -55,51 +57,46 @@ theme_override_constants/margin_bottom = 5
 [node name="VBoxContainer2" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
+[node name="Controls" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer"]
+[node name="Panel" type="Panel" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_e6d7s")
 
-[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 9
 
-[node name="Label" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="PlayPauseButton" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer"]
 layout_mode = 2
-text = "Controls:"
+text = "Play"
 
-[node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-text = "Play all"
-
-[node name="Button2" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-text = "Pause"
-
-[node name="Button3" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="StopButton" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Stop"
 
-[node name="HSlider" type="HSlider" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/MarginContainer/MarginContainer/HBoxContainer"]
+[node name="HSlider" type="HSlider" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 step = 0.01
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
+[node name="LayerContainer" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/VBoxContainer"]
+[node name="Button" type="Button" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/LayerContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "+ Add Layer"
+
+[connection signal="pressed" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/PlayPauseButton" to="." method="_on_play_pause_button_pressed"]
+[connection signal="pressed" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
