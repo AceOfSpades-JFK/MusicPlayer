@@ -64,7 +64,7 @@ func _ready():
 		_streamlist.stream_count = track_info.stream.size()
 		_stream.stream = _streamlist
 		for s in track_info.stream:
-			var stream = load(PATH_TO_MUSIC + track_info.stream[i])
+			var stream = load(track_info.stream[i])
 			_streamlist.set_sync_stream(i, stream)
 			_streamlist.set_sync_stream_volume(i, _calculate_db(_layer_volumes[i]))
 			i += 1
