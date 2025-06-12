@@ -1,16 +1,11 @@
 @tool
 extends MarginContainer
+class_name TrackLayerPanel
 
-@onready var _name_label: Label = $BoxContainer/LayerInfo/FileContents/Name
-@onready var _meta_label: Label = $BoxContainer/LayerInfo/FileContents/Meta
-@onready var _mute_button: CheckBox = $BoxContainer/LayerControls/CheckBox
+@export var _name_label: Label
+@export var _meta_label: Label
+@export var _mute_button: CheckBox
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+var file_name:
+	get: return _name_label.text
+	set(value): _name_label.text = value
