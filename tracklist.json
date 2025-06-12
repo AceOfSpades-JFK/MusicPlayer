@@ -1,17 +1,22 @@
 {
+    "version": 1,
     "tracks": [
         {
             "name": "Regal",
+            "bpm": 160,
+            "artist": "Miguel, the Ace of Spades",
             "stream": [
-                "regal1.ogg",
-                "regal2.ogg"
+                "res://asset/music/regal1.ogg",
+                "res://asset/music/regal2.ogg"
             ]
         },
         {
             "name": "Hell",
+            "bpm": 160,
+            "artist": "Miguel, the Ace of Spades",
             "stream": [
-                "hell1.ogg",
-                "hell2.ogg"
+                "res://asset/music/hell1.ogg",
+                "res://asset/music/hell2.ogg"
             ]
         }
     ]

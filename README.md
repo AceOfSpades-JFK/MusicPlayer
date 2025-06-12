@@ -59,29 +59,40 @@ and for 2 seconds, the previous track fades out and gets unloaded. The new track
 `tracklist.json` should be located in the root of the project folder. Here is an example of a tracklist:
 
     {
+        "version": 1,
         "tracks": [
             {
                 "name": "Regal",
+                "bpm": 160,
+                "artist": "Miguel, the Ace of Spades",
                 "stream": [
-                    "regal1.ogg",
-                    "regal2.ogg"
+                    "res://asset/music/regal1.ogg",
+                    "res://asset/music/regal2.ogg"
                 ]
             },
             {
                 "name": "Hell",
+                "bpm": 160,
+                "artist": "Miguel, the Ace of Spades",
                 "stream": [
-                    "hell1.ogg",
-                    "hell2.ogg"
+                    "res://asset/music/hell1.ogg",
+                    "res://asset/music/hell2.ogg"
                 ]
             }
         ]
     }
 
+`version` serves as a version header, to distinguish what version is compatible with the addon. Then there's `tracks`, the array containing every track.
+
 Every track comes with these pieces of information:
 
 `name`: The name of the track. Idk what else to say
 
-`stream`: What streams are associated with the track. Each stream is located in `res://asset/music`. You can change this in `addons/music_player/script/track.gd`.
+`bpm`: The tempo of the track. All streams should match this tempo
+
+`artist`: The owner of the track. This could be the composer, the producer, or some other entity that was involved with this.
+
+`stream`: The audio file associated with the track.
 
 ## Planned features
 
