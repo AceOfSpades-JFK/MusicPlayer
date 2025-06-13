@@ -19,6 +19,21 @@ var volume: float = 1.0 :
 		if (_stream):
 			_stream.volume_db = _calculate_db(val)
 
+var beat: int:
+	get:
+		return floori(_time / _spb) % _beat_count
+
+var measure: int:
+	get:
+		return floori(_time / _spb) / _beat_count
+
+var time: float:
+	get:
+		return _time
+
+var length: float:
+	get:
+		return _streamlist.get_length()
 
 var _stream: AudioStreamPlayer
 var _streamlist: AudioStreamSynchronized
@@ -26,14 +41,22 @@ var _layer_volumes: Array[float]
 var _tween: Tween
 var _layer_tweens: Array[Tween]
 
+var _bpm: float
+var _spb: float		# Seconds per beat
+var _time: float
+var _beat_count: int		# Beats in a measure
+var _beat_denomination: int # What type of note counts as 1 beat
+
 var playing: bool = false :
 	set(val):
 		playing = val
 		if _stream:
 			if val:
 				_stream.play()
+				_time = 0
 			else:
 				_stream.stop()
+				_time = 0
 
 
 var stream_paused: bool = false :
@@ -58,6 +81,13 @@ func _ready():
 		_stream.bus = MUSIC_PLAYER_BUS
 		add_child(_stream)
 
+		# Set up time measurement
+		# TODO: Add support for user-defined time signatures
+		_beat_count = 4
+		_beat_denomination = 4
+		_bpm = track_info.bpm
+		_spb = 60.0 / _bpm * (float(_beat_count) / float(_beat_denomination))
+
 		# Create the AudioStreamSynchronized streamlist
 		var i = 0
 		_streamlist = AudioStreamSynchronized.new()
@@ -73,7 +103,9 @@ func _ready():
 		queue_free()
 
 
-# func _process(_delta):
+func _process(_delta):
+	if playing && !stream_paused:
+		_time += _delta
 # 	# Apply the global and layer volumes
 # 	if _tween.is_running():
 # 		_apply_volume()

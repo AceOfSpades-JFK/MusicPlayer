@@ -5,15 +5,23 @@ var _panel_ps: PackedScene = preload("res://addons/music_player/editor/track_lay
 var _track_ps: PackedScene = preload("res://addons/music_player/editor/track_panel.tscn")
 
 var _music_player: MusicPlayer
-var _current_track: String
 
 @export var _track_container: NodePath
 @export var _layer_container: NodePath
 @export var _play_button: NodePath
 @export var _stop_button: NodePath
+@export var _time_label_path: NodePath
+@export var _time_slider_path: NodePath
+
+@onready var _time_label: Label = get_node(_time_label_path)
+@onready var _time_slider: Slider = get_node(_time_slider_path)
 
 var _playing: bool = false
 var _first_play: bool = false
+
+var _current_track: Track:
+	get:
+		return _music_player.get_current_track()
 
 
 func _enter_tree() -> void:
@@ -23,6 +31,16 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	_load_tracks()	
+
+
+func _process(delta: float) -> void:
+	if _current_track:
+		_time_label.text = str("%s:%0s | %s:%s" % [\
+			int(_current_track.time / 60.0), \
+			int(_current_track.time) % 60, \
+			_current_track.beat, \
+			_current_track.measure, \
+		])
 
 
 func _load_tracks() -> void:
@@ -44,10 +62,9 @@ func _load_layers(t: String) -> void:
 func _on_track_open(tn: String) -> void:
 	get_node(_layer_container).get_children().all(func (c): c.queue_free(); return true)
 	_load_layers(tn)
-	_current_track = tn
 
 	# Load the current track and stop playing the previous one
-	_music_player.load_track(_current_track, 1.0, false)
+	_music_player.load_track(tn, 1.0, false)
 	_on_stop_button_pressed()
 
 
@@ -74,3 +91,8 @@ func _on_stop_button_pressed() -> void:
 	get_node(_play_button).text = "Play"
 	_music_player.stop()
 	_playing = false
+
+
+func _on_time_slider_drag_ended(value_changed: bool) -> void:
+	
+	pass # Replace with function body.

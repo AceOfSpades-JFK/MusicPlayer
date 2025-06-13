@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://vtblwcsagaqq"]
+
+[ext_resource type="Script" path="res://addons/music_player/editor/controls.gd" id="1_gt8p6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6d7s"]
+bg_color = Color(0, 0, 0, 0.129412)
+
+[node name="Controls" type="MarginContainer"]
+script = ExtResource("1_gt8p6")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_e6d7s")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="PlayPauseButton" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Play"
+
+[node name="StopButton" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stop"
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+step = 0.01
+
+[node name="Time" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "0:00 | 0:0"

@@ -19,6 +19,8 @@ _track_container = NodePath("SplitContainer/Tracklist/TrackContainer")
 _layer_container = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/LayerContainer")
 _play_button = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/PlayPauseButton")
 _stop_button = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/StopButton")
+_time_label_path = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/Time")
+_time_slider_path = null
 
 [node name="SplitContainer" type="SplitContainer" parent="."]
 layout_mode = 1
@@ -83,11 +85,15 @@ text = "Play"
 layout_mode = 2
 text = "Stop"
 
-[node name="HSlider" type="HSlider" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer"]
+[node name="TimeSlider" type="HSlider" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 step = 0.01
+
+[node name="Time" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "0:00 | 0:0"
 
 [node name="LayerContainer" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
 layout_mode = 2
@@ -100,3 +106,4 @@ text = "+ Add Layer"
 
 [connection signal="pressed" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/PlayPauseButton" to="." method="_on_play_pause_button_pressed"]
 [connection signal="pressed" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
+[connection signal="drag_ended" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/TimeSlider" to="." method="_on_time_slider_drag_ended"]

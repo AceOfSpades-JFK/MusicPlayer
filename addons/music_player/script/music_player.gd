@@ -12,6 +12,7 @@ const MIN_DB = -80.0
 
 ### The audio bus to use for the music
 @export var bus: String = "Music"
+@export var json_path: String = PATH_TO_TRACKLIST
 
 ### The tracklist for the current project
 var tracklist: Dictionary
@@ -21,7 +22,7 @@ var _current_track: Track
 
 func _ready():
 	# Load the JSON file as a string
-	var file = FileAccess.open(PATH_TO_TRACKLIST, FileAccess.READ)
+	var file = FileAccess.open(json_path, FileAccess.READ)
 	var content = file.get_as_text()
 	
 	# Parse the JSON file
@@ -34,12 +35,15 @@ func _ready():
 		for t in tracks:
 			var newTrack = TrackInfo.new()
 			newTrack.name = t["name"]
+			newTrack.artist = t["artist"]
+			newTrack.bpm = t["bpm"]
 			newTrack.stream = t["stream"]
 			newTrack.layer_count = t["stream"].size()
 			tracklist[newTrack.name] = newTrack
 			
 	else:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
+		printerr("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
+	
 
 
 ### Loads a track from tracklist.json and sets it as the current track.
