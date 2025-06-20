@@ -20,7 +20,7 @@ _layer_container = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContain
 _play_button = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/PlayPauseButton")
 _stop_button = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/StopButton")
 _time_label_path = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/Time")
-_time_slider_path = null
+_time_slider_path = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/TimeSlider")
 
 [node name="SplitContainer" type="SplitContainer" parent="."]
 layout_mode = 1
@@ -89,7 +89,8 @@ text = "Stop"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-step = 0.01
+max_value = 1.0
+step = 0.001
 
 [node name="Time" type="Label" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -107,3 +108,4 @@ text = "+ Add Layer"
 [connection signal="pressed" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/PlayPauseButton" to="." method="_on_play_pause_button_pressed"]
 [connection signal="pressed" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
 [connection signal="drag_ended" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/TimeSlider" to="." method="_on_time_slider_drag_ended"]
+[connection signal="drag_started" from="SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls/MarginContainer/HBoxContainer/TimeSlider" to="." method="_on_time_slider_drag_started"]

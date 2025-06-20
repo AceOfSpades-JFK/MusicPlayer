@@ -18,6 +18,7 @@ var _music_player: MusicPlayer
 
 var _playing: bool = false
 var _first_play: bool = false
+var _dragging: bool = false
 
 var _current_track: Track:
 	get:
@@ -34,13 +35,20 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	# Display time information on the controls
 	if _current_track:
-		_time_label.text = str("%s:%0s | %s:%s" % [\
+		# Label text
+		var seconds = "%0*d" % [2, int(_current_track.time) % 60]
+		_time_label.text = str("%d:%s | %d:%d" % [\
 			int(_current_track.time / 60.0), \
-			int(_current_track.time) % 60, \
-			_current_track.beat, \
+			seconds, \
 			_current_track.measure, \
+			_current_track.beat, \
 		])
+
+		# Slider position
+		if !_dragging:
+			_time_slider.value = _current_track.time / _current_track.length
 
 
 func _load_tracks() -> void:
@@ -66,6 +74,7 @@ func _on_track_open(tn: String) -> void:
 	# Load the current track and stop playing the previous one
 	_music_player.load_track(tn, 1.0, false)
 	_on_stop_button_pressed()
+	_current_track.finished.connect(_on_stop_button_pressed)
 
 
 func _on_play_pause_button_pressed() -> void:
@@ -87,12 +96,19 @@ func _toggle_play(b: bool) -> void:
 
 
 func _on_stop_button_pressed() -> void:
-	_first_play = false
 	get_node(_play_button).text = "Play"
 	_music_player.stop()
 	_playing = false
+	_first_play = false
+	_time_slider.value = 0
 
 
 func _on_time_slider_drag_ended(value_changed: bool) -> void:
-	
-	pass # Replace with function body.
+	if _dragging && value_changed:
+		_current_track.seek(_time_slider.value * _current_track.length)
+		_dragging = false
+
+
+func _on_time_slider_drag_started() -> void:
+	if !_dragging:
+		_dragging = true

@@ -1,12 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://vtblwcsagaqq"]
-
-[ext_resource type="Script" path="res://addons/music_player/editor/controls.gd" id="1_gt8p6"]
+[gd_scene load_steps=2 format=3 uid="uid://vtblwcsagaqq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6d7s"]
 bg_color = Color(0, 0, 0, 0.129412)
 
 [node name="Controls" type="MarginContainer"]
-script = ExtResource("1_gt8p6")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2

@@ -19,6 +19,9 @@ var tracklist: Dictionary
 
 var _current_track: Track
 
+signal loaded_track
+signal unloaded_track
+
 
 func _ready():
 	# Load the JSON file as a string
@@ -43,7 +46,6 @@ func _ready():
 			
 	else:
 		printerr("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
-	
 
 
 ### Loads a track from tracklist.json and sets it as the current track.
@@ -58,7 +60,9 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> v
 
 		else:
 			# Unload the current track
-			unload_track()
+			if _current_track:
+				_current_track.queue_free()
+				unloaded_track.emit()
 
 			# Create the track node
 			var t: Track = _create_track_node(trackname)
@@ -69,6 +73,7 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> v
 			add_child(t)
 			if autoplay: t.play()
 			_current_track = t
+			loaded_track.emit()
 	else:
 		printerr("Track (" + trackname + ") does not exist!")
 	
@@ -88,6 +93,7 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 			
 			# Fade the previous track out
 			_current_track.fade_finished.connect(_current_track.queue_free)
+			_current_track.fade_finished.connect(unloaded_track.emit)
 			_current_track.fade_out(duration)
 			_current_track.name = '__goodbye__'
 
@@ -109,7 +115,6 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 ### Unloads the current track.
 func unload_track() -> void:
 	if _current_track:
-		_current_track.name = '__goodbye__'
 		_current_track.queue_free()
 		_current_track = null
 

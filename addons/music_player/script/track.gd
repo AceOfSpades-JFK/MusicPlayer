@@ -44,8 +44,10 @@ var _layer_tweens: Array[Tween]
 var _bpm: float
 var _spb: float		# Seconds per beat
 var _time: float
-var _beat_count: int		# Beats in a measure
-var _beat_denomination: int # What type of note counts as 1 beat
+# TODO: Add support for user-defined time signatures
+var _beat_count: int		= 4	# Beats in a measure
+var _beat_denomination: int = 4	# What type of note counts as 1 beat
+var _beat_time: float = 0.0
 
 var playing: bool = false :
 	set(val):
@@ -54,9 +56,12 @@ var playing: bool = false :
 			if val:
 				_stream.play()
 				_time = 0
+				_beat_time = 0
 			else:
+				stream_paused = false
 				_stream.stop()
 				_time = 0
+				_beat_time = 0
 
 
 var stream_paused: bool = false :
@@ -66,6 +71,8 @@ var stream_paused: bool = false :
 			_stream.stream_paused = val
 
 signal fade_finished
+signal finished
+signal beat_passed(time: float, beat: int, measure: int)
 
 
 func _ready():
@@ -82,11 +89,8 @@ func _ready():
 		add_child(_stream)
 
 		# Set up time measurement
-		# TODO: Add support for user-defined time signatures
-		_beat_count = 4
-		_beat_denomination = 4
 		_bpm = track_info.bpm
-		_spb = 60.0 / _bpm * (float(_beat_count) / float(_beat_denomination))
+		_spb = 60.0 / _bpm
 
 		# Create the AudioStreamSynchronized streamlist
 		var i = 0
@@ -98,6 +102,8 @@ func _ready():
 			_streamlist.set_sync_stream(i, stream)
 			_streamlist.set_sync_stream_volume(i, _calculate_db(_layer_volumes[i]))
 			i += 1
+		
+		_stream.finished.connect(_on_stream_finished)
 	else:
 		printerr("No track info found!")
 		queue_free()
@@ -106,6 +112,9 @@ func _ready():
 func _process(_delta):
 	if playing && !stream_paused:
 		_time += _delta
+		_beat_time += _delta
+		if _beat_time >= _spb:
+			beat_passed.emit(_time, beat, measure)
 # 	# Apply the global and layer volumes
 # 	if _tween.is_running():
 # 		_apply_volume()
@@ -124,6 +133,11 @@ func stop() -> void:
 ### Pauses playback of the track layers
 func pause() -> void:
 	stream_paused = !stream_paused
+
+
+func seek(t: float) -> void:
+	_stream.seek(t)
+	_time = t
 
 
 ### Sets the volume of a layer to the provided normalized float volume
@@ -209,3 +223,8 @@ func _calculate_db(normal_volume: float) -> float:
 
 func _apply_volume() -> void:
 	pass
+
+
+func _on_stream_finished() -> void:
+	playing = false
+	finished.emit()
