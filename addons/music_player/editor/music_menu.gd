@@ -54,27 +54,41 @@ func _process(delta: float) -> void:
 func _load_tracks() -> void:
 	for k: String in _music_player.tracklist.keys():
 		var p: TrackPanel = _track_ps.instantiate()
-		p.track_name = k
+		p.track_info = _music_player.tracklist[k]
 		get_node(_track_container).add_child(p)
 		p.open.connect(_on_track_open)
 
 
 func _load_layers(t: String) -> void:
 	if t && !t.is_empty() && _music_player.tracklist.has(t):
+		var i = 0
 		for s: String in _music_player.tracklist[t].stream:
 			var p: TrackLayerPanel = _panel_ps.instantiate()
-			p.file_name = s
+			p.track_info = _music_player.tracklist[t]
+			p.layer_index = i
+			p.mute_toggled.connect(_on_layer_mute_toggled)
 			get_node(_layer_container).add_child(p)
+			i += 1
+
+
+func _on_layer_mute_toggled(muted: bool, layer_index: int) -> void:
+	if muted:
+		_current_track.set_layer_volume(layer_index, 0.0)
+	else:
+		_current_track.set_layer_volume(layer_index, 1.0)
 	
 
 func _on_track_open(tn: String) -> void:
-	get_node(_layer_container).get_children().all(func (c): c.queue_free(); return true)
-	_load_layers(tn)
-
 	# Load the current track and stop playing the previous one
-	_music_player.load_track(tn, 1.0, false)
+	if (!_music_player.load_track(tn, 1.0, false)):
+		return
+	
 	_on_stop_button_pressed()
 	_current_track.finished.connect(_on_stop_button_pressed)
+	
+	# Load all the layer panels
+	get_node(_layer_container).get_children().all(func (c): c.queue_free(); return true)
+	_load_layers(tn)
 
 
 func _on_play_pause_button_pressed() -> void:

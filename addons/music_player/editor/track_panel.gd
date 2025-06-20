@@ -7,13 +7,14 @@ class_name TrackPanel
 
 signal open(tn: String)
 
-var track_name: String:
-	get: 
-		return track_name
-	set(value): 
-		track_name = value
-		_name_label.text = value
+var track_info: TrackInfo
+
+
+func _ready() -> void:
+	_name_label.text = track_info.name
+	_meta_label.text = "%s \n %sBPM" % [track_info.artist, track_info.bpm]
+	pass
 
 
 func _on_open_button_pressed() -> void:
-	open.emit(track_name)
+	open.emit(track_info.name)

@@ -47,7 +47,6 @@ var _time: float
 # TODO: Add support for user-defined time signatures
 var _beat_count: int		= 4	# Beats in a measure
 var _beat_denomination: int = 4	# What type of note counts as 1 beat
-var _beat_time: float = 0.0
 
 var playing: bool = false :
 	set(val):
@@ -56,12 +55,10 @@ var playing: bool = false :
 			if val:
 				_stream.play()
 				_time = 0
-				_beat_time = 0
 			else:
 				stream_paused = false
 				_stream.stop()
 				_time = 0
-				_beat_time = 0
 
 
 var stream_paused: bool = false :
@@ -111,10 +108,10 @@ func _ready():
 
 func _process(_delta):
 	if playing && !stream_paused:
-		_time += _delta
-		_beat_time += _delta
-		if _beat_time >= _spb:
+		var t = _time + _delta
+		if (fmod(_time, _spb) <= fmod(t, _spb)):
 			beat_passed.emit(_time, beat, measure)
+		_time = t
 # 	# Apply the global and layer volumes
 # 	if _tween.is_running():
 # 		_apply_volume()

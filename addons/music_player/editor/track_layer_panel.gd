@@ -6,6 +6,16 @@ class_name TrackLayerPanel
 @export var _meta_label: Label
 @export var _mute_button: CheckBox
 
-var file_name:
-	get: return _name_label.text
-	set(value): _name_label.text = value
+
+var track_info: TrackInfo
+var layer_index: int
+
+signal mute_toggled(toggled_on: bool, layer_index: int)
+
+
+func _ready() -> void:
+	_name_label.text = track_info.stream[layer_index]
+
+
+func _on_mute_box_toggled(toggled_on: bool) -> void:
+	mute_toggled.emit(toggled_on, layer_index)

@@ -52,12 +52,13 @@ func _ready():
 #	trackname: Name of the track to load
 #	volume: How loud the track should be (default is 1.0)
 #	autoplay: Should the track play upon loading (default is true)
-func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> void:
+#	Returns true on success
+func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> bool:
 	if tracklist.has(trackname):
 		if _current_track && _current_track.name == trackname:
 			# Ignore if the provided track is already the thing
 			print("Track (" + trackname + ") is already loaded!")
-
+			return false
 		else:
 			# Unload the current track
 			if _current_track:
@@ -76,20 +77,24 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> v
 			loaded_track.emit()
 	else:
 		printerr("Track (" + trackname + ") does not exist!")
+		return false
+	
+	return true
 	
 
 ### Fades the current track to a new track
 #	trackname: Name of the track to fade to
 #	vol: Volume to fade the new track to
 #	duration: How long the track should fade
-func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -> void:
+#	Returns true on success
+func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -> bool:
 	if tracklist.has(trackname):
 		# Fade out the old track
 		if _current_track:
 			# Return if the provided trackname is the current track!
 			if _current_track.name == trackname:
 				print("Track (" + trackname + ") is already loaded!")
-				return
+				return false
 			
 			# Fade the previous track out
 			_current_track.fade_finished.connect(_current_track.queue_free)
@@ -110,6 +115,9 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 		
 	else:
 		printerr("Track (" + trackname + ") does not exist!")
+		return false
+	
+	return true
 
 
 ### Unloads the current track.

@@ -14,7 +14,7 @@ theme_override_constants/margin_bottom = 4
 script = ExtResource("1_78ls3")
 _name_label = NodePath("BoxContainer/LayerInfo/FileContents/Name")
 _meta_label = NodePath("BoxContainer/LayerInfo/FileContents/Meta")
-_mute_button = NodePath("BoxContainer/LayerControls/CheckBox")
+_mute_button = NodePath("BoxContainer/LayerControls/MuteBox")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
@@ -36,8 +36,6 @@ text = "filename.ogg"
 
 [node name="Meta" type="Label" parent="BoxContainer/LayerInfo/FileContents"]
 layout_mode = 2
-text = "By Artist
-4:20 | 44100hz"
 
 [node name="Waveform" type="ColorRect" parent="BoxContainer/LayerInfo"]
 layout_mode = 2
@@ -47,7 +45,7 @@ color = Color(0.136826, 0.136826, 0.136826, 1)
 [node name="LayerControls" type="HBoxContainer" parent="BoxContainer"]
 layout_mode = 2
 
-[node name="CheckBox" type="CheckBox" parent="BoxContainer/LayerControls"]
+[node name="MuteBox" type="CheckBox" parent="BoxContainer/LayerControls"]
 layout_mode = 2
 text = "Mute"
 
@@ -63,3 +61,5 @@ popup/item_1/text = "Settings"
 popup/item_1/id = 1
 popup/item_2/text = "Remove"
 popup/item_2/id = 1
+
+[connection signal="toggled" from="BoxContainer/LayerControls/MuteBox" to="." method="_on_mute_box_toggled"]
