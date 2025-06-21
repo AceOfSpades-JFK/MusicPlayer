@@ -114,7 +114,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="TrackListLoadDialogue" type="FileDialog" parent="."]
-title = "Open a tracklist"
+title = "Open a File"
 size = Vector2i(303, 180)
 ok_button_text = "Open"
 file_mode = 0
