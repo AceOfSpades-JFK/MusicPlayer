@@ -15,7 +15,7 @@ var track: Track:
 			track.finished.disconnect(reset)
 		
 		if v:
-			_track_label.text = "Now playing: %s" % v.name
+			_track_label.text = "Now playing: %s" % v.track_info.name
 			_play_button.disabled = false
 			_stop_button.disabled = false
 			_time_slider.editable = true

@@ -65,7 +65,6 @@ func load_tracklist(filepath: StringName) -> bool:
 			newTrack.artist = t["artist"]
 			newTrack.bpm = t["bpm"]
 			newTrack.stream = t["stream"]
-			newTrack.layer_count = t["stream"].size()
 			newTracklist[newTrack.name] = newTrack
 			
 	else:
@@ -106,24 +105,24 @@ func add_track_layer(s: StringName) -> void:
 #	Returns true on success
 func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> bool:
 	if tracklist.has(trackname):
-		if _current_track && _current_track.name == trackname:
-			# Ignore if the provided track is already the thing
-			print("Track (" + trackname + ") is already loaded!")
-			return false
-		else:
-			# Unload the current track
-			unload_track()
+		#if _current_track && _current_track.name == trackname:
+			## Ignore if the provided track is already the thing
+			#print("Track (" + trackname + ") is already loaded!")
+			#return false
+		#else:
+		# Unload the current track
+		unload_track()
 
-			# Create the track node
-			var t: Track = _create_track_node(trackname)
-			t.volume = vol
-			t.bus = bus
+		# Create the track node
+		var t: Track = _create_track_node(trackname)
+		t.volume = vol
+		t.bus = bus
 
-			# Add the newly created track to the scene tree, and set it as the current track
-			add_child(t)
-			if autoplay: t.play()
-			_current_track = t
-			loaded_track.emit(trackname)
+		# Add the newly created track to the scene tree, and set it as the current track
+		add_child(t)
+		if autoplay: t.play()
+		_current_track = t
+		loaded_track.emit(trackname)
 	else:
 		printerr("Track (" + trackname + ") does not exist!")
 		return false
@@ -228,7 +227,7 @@ func _get_loaded_track(trackname: String) -> Track:
 
 func _create_track_node(trackname: String) -> Track:
 	# Get the track info, create the track node, and add it to the scene tree
-	var ti = tracklist[trackname]
+	var ti: TrackInfo = tracklist[trackname]
 	var t: Track = Track.new()
 	t.name = ti.name
 	t.track_info = ti

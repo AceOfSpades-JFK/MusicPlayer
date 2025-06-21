@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bjce1r2qed8px"]
+[gd_scene load_steps=4 format=3 uid="uid://bjce1r2qed8px"]
 
 [ext_resource type="Script" path="res://addons/music_player/editor/music_menu.gd" id="1_8vcda"]
 [ext_resource type="PackedScene" uid="uid://vtblwcsagaqq" path="res://addons/music_player/editor/controls.tscn" id="2_5gm0s"]
+[ext_resource type="PackedScene" uid="uid://6jdc3bsgdb3l" path="res://addons/music_player/editor/create_track_dialogue.tscn" id="3_rbxs4"]
 
 [node name="MusicMenu" type="Control"]
 layout_mode = 3
@@ -16,11 +17,13 @@ script = ExtResource("1_8vcda")
 _track_container_path = NodePath("SplitContainer/Tracklist/BoxContainer/TrackContainer")
 _layer_container_path = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/LayerContainer")
 _tracklist_file_dialogue_path = NodePath("TrackListLoadDialogue")
+_stream_layer_dialogue_path = NodePath("StreamLayerLoadDialogue")
 _load_button_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton")
 _save_button_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveButton")
 _saveas_button_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveAsButton")
 _tracklist_label_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/TracklistLabel")
 _controls_path = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls")
+_window_path = NodePath("Window")
 
 [node name="SplitContainer" type="SplitContainer" parent="."]
 layout_mode = 1
@@ -80,9 +83,9 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Button" type="Button" parent="SplitContainer/Tracklist/BoxContainer/TrackContainer"]
+[node name="CreateTrackButton" type="Button" parent="SplitContainer/Tracklist/BoxContainer/TrackContainer"]
 layout_mode = 2
-text = "+ Add Track"
+text = "+ Create Track"
 
 [node name="WorkArea" type="MarginContainer" parent="SplitContainer"]
 custom_minimum_size = Vector2(500, 0)
@@ -111,14 +114,34 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="TrackListLoadDialogue" type="FileDialog" parent="."]
-title = "Open a File"
+title = "Open a tracklist"
 size = Vector2i(303, 180)
 ok_button_text = "Open"
 file_mode = 0
 filters = PackedStringArray("*.json")
 
+[node name="StreamLayerLoadDialogue" type="FileDialog" parent="."]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("Audio Files", "audio/mp3,audio/ogg,audio/wav,audio/flac", "*.wav,*.mp3,*.ogg,*.flac")
+
+[node name="Window" type="Window" parent="."]
+title = "Create new track"
+position = Vector2i(0, 36)
+size = Vector2i(300, 175)
+visible = false
+transient = true
+exclusive = true
+
+[node name="CreateTrackDialogue" parent="Window" instance=ExtResource("3_rbxs4")]
+
 [connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveAsButton" to="." method="_on_save_as_button_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TrackContainer/CreateTrackButton" to="." method="_on_create_track_button_pressed"]
 [connection signal="canceled" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_canceled"]
 [connection signal="file_selected" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_file_selected"]
+[connection signal="file_selected" from="StreamLayerLoadDialogue" to="." method="_on_stream_layer_dialogue_file_selected"]
+[connection signal="cancelled" from="Window/CreateTrackDialogue" to="." method="_on_create_track_cancelled"]
+[connection signal="created" from="Window/CreateTrackDialogue" to="." method="_on_create_track_created"]

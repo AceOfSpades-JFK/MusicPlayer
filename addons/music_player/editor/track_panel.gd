@@ -12,7 +12,7 @@ var track_info: TrackInfo
 
 func _ready() -> void:
 	_name_label.text = track_info.name
-	_meta_label.text = "%s \n %sBPM" % [track_info.artist, track_info.bpm]
+	_meta_label.text = "%s \n%sBPM" % [track_info.artist, track_info.bpm]
 	pass
 
 

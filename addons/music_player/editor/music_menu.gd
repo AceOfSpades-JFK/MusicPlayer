@@ -3,21 +3,25 @@ extends Control
 
 var _panel_ps: PackedScene = preload("res://addons/music_player/editor/track_layer_panel.tscn")
 var _track_ps: PackedScene = preload("res://addons/music_player/editor/track_panel.tscn")
+var _create_track_ps: PackedScene = preload("res://addons/music_player/editor/create_track_dialogue.tscn")
 
 var _music_player: MusicPlayer
 
 @export var _track_container_path: NodePath
 @export var _layer_container_path: NodePath
 @export var _tracklist_file_dialogue_path: NodePath
+@export var _stream_layer_dialogue_path: NodePath
 @export var _load_button_path: NodePath
 @export var _save_button_path: NodePath
 @export var _saveas_button_path: NodePath
 @export var _tracklist_label_path: NodePath
 @export var _controls_path: NodePath
+@export var _window_path: NodePath
 
 @onready var _track_container: Container = get_node(_track_container_path)
 @onready var _layer_container: Container = get_node(_layer_container_path)
 @onready var _tracklist_file_dialogue: FileDialog = get_node(_tracklist_file_dialogue_path)
+@onready var _stream_layer_dialogue: FileDialog = get_node(_stream_layer_dialogue_path)
 @onready var _load_button: Button = get_node(_load_button_path)
 @onready var _save_button: Button = get_node(_save_button_path)
 @onready var _saveas_button: Button = get_node(_saveas_button_path)
@@ -28,7 +32,8 @@ var _tracklist_file = ""
 var _playing: bool = false
 var _first_play: bool = false
 var _dragging: bool = false
-var _using_external_file: bool = false
+var _dirty_tracklist: bool = false
+var _window: Window
 
 var _current_track: Track:
 	get:
@@ -44,37 +49,43 @@ func _enter_tree() -> void:
 # 	_load_tracks()	
 
 
-func _load_tracks() -> void:
-	for k: String in _music_player.tracklist.keys():
-		var p: TrackPanel = _track_ps.instantiate()
-		p.track_info = _music_player.tracklist[k]
-		p.open.connect(_on_track_open)
+func _add_track_panel(t: TrackInfo) -> void:
+	var p: TrackPanel = _track_ps.instantiate()
+	p.track_info = t
+	p.open.connect(_on_track_open)
+	_track_container.add_child(p)
 
-		_track_container.add_child(p)
-	
+
+func _load_tracks() -> void:
 	var b: Button = Button.new()
-	b.text = "+ Add Track"
-	# b.pressed.connect()
+	b.text = "+ Create Track"
+	b.pressed.connect(_on_create_track_button_pressed)
 	_track_container.add_child(b)
 	_track_container.visible = true
+
+	for k: String in _music_player.tracklist.keys():
+		_add_track_panel(_music_player.tracklist[k])
+
+
+func _add_track_layer_panel(t: TrackInfo, i: int) -> void:
+	var p: TrackLayerPanel = _panel_ps.instantiate()
+	p.track_info = t
+	p.layer_index = i
+	p.mute_toggled.connect(_on_layer_mute_toggled)
+	_layer_container.add_child(p)
 
 
 func _load_layers(t: String) -> void:
 	if t && !t.is_empty() && _music_player.tracklist.has(t):
 		var i = 0
 		for s: String in _music_player.tracklist[t].stream:
-			var p: TrackLayerPanel = _panel_ps.instantiate()
-			p.track_info = _music_player.tracklist[t]
-			p.layer_index = i
-			p.mute_toggled.connect(_on_layer_mute_toggled)
-			
-			_layer_container.add_child(p)
+			_add_track_layer_panel(_music_player.tracklist[t], i)
 			i += 1
 	
 	var b: Button = Button.new()
 	b.text = "+ Add Layer"
 	b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	# b.pressed.connect()
+	b.pressed.connect(_on_add_layer_button_pressed)
 	_layer_container.add_child(b)
 	_layer_container.visible = true
 
@@ -102,7 +113,7 @@ func _on_load_button_pressed() -> void:
 
 
 func _on_save_button_pressed() -> void:
-	if _using_external_file && !_tracklist_file.is_empty():
+	if !_tracklist_file.is_empty():
 		_save_tracklist(_tracklist_file)
 	else:
 		_on_file_buttons_pressed(FileDialog.FILE_MODE_SAVE_FILE)
@@ -122,8 +133,9 @@ func _on_file_buttons_pressed(fm: FileDialog.FileMode) -> void:
 
 func _on_track_list_load_dialogue_canceled() -> void:
 	_load_button.disabled = false
-	_save_button.disabled = false
-	_saveas_button.disabled = false
+	if _dirty_tracklist || _tracklist_file.is_empty():
+		_save_button.disabled = false
+		_saveas_button.disabled = false
 
 
 func _on_track_list_load_dialogue_file_selected(path: StringName) -> void:
@@ -131,7 +143,7 @@ func _on_track_list_load_dialogue_file_selected(path: StringName) -> void:
 
 	_tracklist_label.text = path
 	_saveas_button.visible = true
-	_using_external_file = true
+	_dirty_tracklist = false
 	_tracklist_file = path
 
 	if _tracklist_file_dialogue.file_mode == FileDialog.FILE_MODE_OPEN_FILE:
@@ -165,3 +177,32 @@ func _clear_layers() -> void:
 func _clear_tracks() -> void:
 	_controls.track = null
 	_track_container.get_children().all(func(c): c.queue_free(); return true)
+
+
+func _on_add_layer_button_pressed() -> void:
+	_stream_layer_dialogue.popup_centered()
+
+
+func _on_create_track_button_pressed() -> void:
+	var w: Window = get_node(_window_path)
+	w.popup_centered()
+
+
+func _on_create_track_cancelled() -> void:
+	get_node(_window_path).hide()
+
+
+func _on_create_track_created(t: TrackInfo) -> void:
+	_music_player.add_track(t)
+	_add_track_panel(t)
+	get_node(_window_path).hide()
+	_dirty_tracklist = true
+	_on_track_list_load_dialogue_canceled()
+
+
+func _on_stream_layer_dialogue_file_selected(path: String) -> void:
+	_current_track.track_info.stream.append(path)
+	_on_track_open(_current_track.track_info.name)
+	_dirty_tracklist = true
+	_on_track_list_load_dialogue_canceled()
+	
