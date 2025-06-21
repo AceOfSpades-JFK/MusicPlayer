@@ -1,9 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://vtblwcsagaqq"]
+[gd_scene load_steps=3 format=3 uid="uid://vtblwcsagaqq"]
+
+[ext_resource type="Script" path="res://addons/music_player/editor/controls.gd" id="1_57r3n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6d7s"]
 bg_color = Color(0, 0, 0, 0.129412)
 
 [node name="Controls" type="MarginContainer"]
+script = ExtResource("1_57r3n")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
@@ -16,24 +19,40 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 4
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="BoxContainer" type="BoxContainer" parent="MarginContainer"]
+layout_mode = 2
+vertical = true
+
+[node name="TrackLabel" type="Label" parent="MarginContainer/BoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/BoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 9
 
-[node name="PlayPauseButton" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="PlayPauseButton" type="Button" parent="MarginContainer/BoxContainer/HBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Play"
 
-[node name="StopButton" type="Button" parent="MarginContainer/HBoxContainer"]
+[node name="StopButton" type="Button" parent="MarginContainer/BoxContainer/HBoxContainer"]
 layout_mode = 2
+disabled = true
 text = "Stop"
 
-[node name="HSlider" type="HSlider" parent="MarginContainer/HBoxContainer"]
+[node name="TimeSlider" type="HSlider" parent="MarginContainer/BoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-step = 0.01
+max_value = 1.0
+step = 0.001
+editable = false
 
-[node name="Time" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="TimeLabel" type="Label" parent="MarginContainer/BoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "0:00 | 0:0"
+
+[connection signal="pressed" from="MarginContainer/BoxContainer/HBoxContainer/PlayPauseButton" to="." method="_on_play_pause_button_pressed"]
+[connection signal="pressed" from="MarginContainer/BoxContainer/HBoxContainer/StopButton" to="." method="_on_stop_button_pressed"]
+[connection signal="drag_ended" from="MarginContainer/BoxContainer/HBoxContainer/TimeSlider" to="." method="_on_time_slider_drag_ended"]
+[connection signal="drag_started" from="MarginContainer/BoxContainer/HBoxContainer/TimeSlider" to="." method="_on_time_slider_drag_started"]

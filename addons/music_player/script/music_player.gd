@@ -16,16 +16,32 @@ const MIN_DB = -80.0
 
 ### The tracklist for the current project
 var tracklist: Dictionary
-
 var _current_track: Track
 
-signal loaded_track
-signal unloaded_track
+signal loaded_tracklist
+signal unloaded_tracklist
+signal loaded_track(track_name: String)
+signal unloaded_track(unloaded_track_name: String)
 
 
 func _ready():
+	load_tracklist(PATH_TO_TRACKLIST)
+
+
+### Load the tracklist
+func load_tracklist(filepath: String) -> bool:
+	# Clear the tracklist if it exists
+	if !tracklist.is_empty():
+		tracklist.clear()
+	
+	# Unload the current track
+	unload_track()
+
 	# Load the JSON file as a string
-	var file = FileAccess.open(json_path, FileAccess.READ)
+	var file = FileAccess.open(filepath, FileAccess.READ)
+	if !file:
+		push_error("File %s not found!" % filepath)
+		return false
 	var content = file.get_as_text()
 	
 	# Parse the JSON file
@@ -46,6 +62,11 @@ func _ready():
 			
 	else:
 		printerr("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
+		return false
+	
+	loaded_tracklist.emit()
+	json_path = filepath
+	return true
 
 
 ### Loads a track from tracklist.json and sets it as the current track.
@@ -61,9 +82,7 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> b
 			return false
 		else:
 			# Unload the current track
-			if _current_track:
-				_current_track.queue_free()
-				unloaded_track.emit()
+			unload_track()
 
 			# Create the track node
 			var t: Track = _create_track_node(trackname)
@@ -74,7 +93,7 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> b
 			add_child(t)
 			if autoplay: t.play()
 			_current_track = t
-			loaded_track.emit()
+			loaded_track.emit(trackname)
 	else:
 		printerr("Track (" + trackname + ") does not exist!")
 		return false
@@ -88,6 +107,10 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> b
 #	duration: How long the track should fade
 #	Returns true on success
 func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -> bool:
+	var old_t: = _current_track.name
+	var queue_current_track_free: Callable = func():
+		unloaded_track.emit(old_t)
+
 	if tracklist.has(trackname):
 		# Fade out the old track
 		if _current_track:
@@ -98,7 +121,7 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 			
 			# Fade the previous track out
 			_current_track.fade_finished.connect(_current_track.queue_free)
-			_current_track.fade_finished.connect(unloaded_track.emit)
+			_current_track.fade_finished.connect(queue_current_track_free)
 			_current_track.fade_out(duration)
 			_current_track.name = '__goodbye__'
 
@@ -123,6 +146,7 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 ### Unloads the current track.
 func unload_track() -> void:
 	if _current_track:
+		unloaded_track.emit(_current_track.name)
 		_current_track.queue_free()
 		_current_track = null
 
