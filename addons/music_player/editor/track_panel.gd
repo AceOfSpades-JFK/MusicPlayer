@@ -2,10 +2,14 @@
 extends MarginContainer
 class_name TrackPanel
 
+const _POPUP_ID_REMOVE: int = 1
+
 @export var _name_label: Label
 @export var _meta_label: Label
+@onready var _menu_button: MenuButton = $HBoxContainer/MarginContainer/VBoxContainer/MenuButton
 
 signal open(tn: String)
+signal remove_requested(tn: String)
 
 var track_info: TrackInfo
 
@@ -13,8 +17,16 @@ var track_info: TrackInfo
 func _ready() -> void:
 	_name_label.text = track_info.name
 	_meta_label.text = "%s \n%sBPM" % [track_info.artist, track_info.bpm]
+	_menu_button.get_popup().id_pressed.connect(_on_menu_button_pressed)
 	pass
 
 
 func _on_open_button_pressed() -> void:
 	open.emit(track_info.name)
+
+
+func _on_menu_button_pressed(id: int) -> void:
+	match id:
+		_POPUP_ID_REMOVE:
+			remove_requested.emit(track_info.name)
+	

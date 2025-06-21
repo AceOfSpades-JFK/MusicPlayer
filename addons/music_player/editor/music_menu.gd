@@ -53,6 +53,7 @@ func _add_track_panel(t: TrackInfo) -> void:
 	var p: TrackPanel = _track_ps.instantiate()
 	p.track_info = t
 	p.open.connect(_on_track_open)
+	p.remove_requested.connect(_on_track_removed)
 	_track_container.add_child(p)
 
 
@@ -116,8 +117,9 @@ func _on_load_button_pressed() -> void:
 func _on_save_button_pressed() -> void:
 	if !_tracklist_file.is_empty():
 		_save_tracklist(_tracklist_file)
+		_on_track_list_load_dialogue_canceled()
 	else:
-		_on_file_buttons_pressed(FileDialog.FILE_MODE_SAVE_FILE)
+		_on_save_as_button_pressed()
 
 
 func _on_save_as_button_pressed() -> void:
@@ -133,15 +135,13 @@ func _on_file_buttons_pressed(fm: FileDialog.FileMode) -> void:
 
 
 func _on_track_list_load_dialogue_canceled() -> void:
+	var grey_save: bool = _dirty_tracklist || _tracklist_file.is_empty()
 	_load_button.disabled = false
-	if _dirty_tracklist || _tracklist_file.is_empty():
-		_save_button.disabled = false
-		_saveas_button.disabled = false
+	_save_button.disabled = !grey_save
+	_saveas_button.disabled = !grey_save
 
 
 func _on_track_list_load_dialogue_file_selected(path: StringName) -> void:
-	_on_track_list_load_dialogue_canceled()
-
 	_tracklist_label.text = path
 	_saveas_button.visible = true
 	_dirty_tracklist = false
@@ -154,6 +154,8 @@ func _on_track_list_load_dialogue_file_selected(path: StringName) -> void:
 		_load_tracks()
 	elif _tracklist_file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
 		_save_tracklist(path)
+	
+	_on_track_list_load_dialogue_canceled()
 
 
 func _save_tracklist(path: StringName) -> void:
@@ -168,6 +170,8 @@ func _save_tracklist(path: StringName) -> void:
 	
 	var json_string = JSON.stringify(dic)
 	write_to.store_line(json_string)
+	_dirty_tracklist = false
+	_tracklist_file = path
 
 
 func _clear_layers() -> void:
@@ -176,7 +180,6 @@ func _clear_layers() -> void:
 
 
 func _clear_tracks() -> void:
-	_controls.track = null
 	_track_container.get_children().all(func(c): c.queue_free(); return true)
 
 
@@ -211,5 +214,16 @@ func _on_stream_layer_dialogue_file_selected(path: String) -> void:
 func _on_layer_remove_requested(index: int) -> void:
 	_current_track.track_info.stream.remove_at(index)
 	_on_track_open(_current_track.track_info.name)
+	_dirty_tracklist = true
+	_on_track_list_load_dialogue_canceled()
+
+
+func _on_track_removed(tn: String):
+	if _current_track && tn == _current_track.track_info.name:
+		_clear_layers()
+		
+	_music_player.remove_track(tn)
+	_clear_tracks()
+	_load_tracks()
 	_dirty_tracklist = true
 	_on_track_list_load_dialogue_canceled()

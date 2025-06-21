@@ -83,11 +83,23 @@ func load_tracklist(filepath: StringName) -> bool:
 
 	tracklist = newTracklist
 	return true
+	
 
 ### Adds a new track to the tracklist
 #	t: Info of the track you want to add
 func add_track(t: TrackInfo) -> void:
 	tracklist[t.name] = t
+
+
+func remove_track(tn: StringName) -> TrackInfo:
+	if tracklist.has(tn):
+		var ti: TrackInfo = tracklist[tn]
+		tracklist.erase(tn)
+		if _current_track && _current_track.track_info.name == tn:
+			unload_track()
+		return ti
+
+	return null
 
 
 ### Loads a track from tracklist.json and sets it as the current track.
