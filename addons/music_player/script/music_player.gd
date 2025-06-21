@@ -57,6 +57,9 @@ func load_tracklist(filepath: StringName) -> bool:
 		# Loop through all the tracks and put them in the tracklist dictionary
 		var tracks = data["tracks"]
 		for t in tracks:
+			if !_is_track_dictionary_valid(t):
+				push_error("Invalid track format in tracklist at %s!" % filepath)
+				return false
 			var newTrack = TrackInfo.new()
 			newTrack.name = t["name"]
 			newTrack.artist = t["artist"]
@@ -81,6 +84,19 @@ func load_tracklist(filepath: StringName) -> bool:
 
 	tracklist = newTracklist
 	return true
+
+
+func _is_track_dictionary_valid(t: Dictionary) -> bool:
+	var keys = ['name', 'artist', 'bpm', 'stream']
+	return t.keys().all(func(k): return keys.has(k))
+
+
+func add_track(t: TrackInfo) -> void:
+	tracklist[t.name] = t
+
+
+func add_track_layer(s: StringName) -> void:
+	tracklist[_current_track.name].stream.add(s)
 
 
 ### Loads a track from tracklist.json and sets it as the current track.

@@ -73,9 +73,16 @@ layout_mode = 2
 disabled = true
 text = "Save as..."
 
+[node name="HSeparator" type="HSeparator" parent="SplitContainer/Tracklist/BoxContainer"]
+layout_mode = 2
+
 [node name="TrackContainer" type="VBoxContainer" parent="SplitContainer/Tracklist/BoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="SplitContainer/Tracklist/BoxContainer/TrackContainer"]
+layout_mode = 2
+text = "+ Add Track"
 
 [node name="WorkArea" type="MarginContainer" parent="SplitContainer"]
 custom_minimum_size = Vector2(500, 0)
@@ -110,6 +117,8 @@ ok_button_text = "Open"
 file_mode = 0
 filters = PackedStringArray("*.json")
 
-[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton" to="." method="_on_load_tracklist_button_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveAsButton" to="." method="_on_save_as_button_pressed"]
 [connection signal="canceled" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_canceled"]
 [connection signal="file_selected" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_file_selected"]

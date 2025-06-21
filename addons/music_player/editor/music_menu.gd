@@ -51,6 +51,12 @@ func _load_tracks() -> void:
 		p.open.connect(_on_track_open)
 
 		_track_container.add_child(p)
+	
+	var b: Button = Button.new()
+	b.text = "+ Add Track"
+	# b.pressed.connect()
+	_track_container.add_child(b)
+	_track_container.visible = true
 
 
 func _load_layers(t: String) -> void:
@@ -91,7 +97,23 @@ func _on_track_open(tn: String) -> void:
 	_controls.track = _current_track
 
 
-func _on_load_tracklist_button_pressed() -> void:
+func _on_load_button_pressed() -> void:
+	_on_file_buttons_pressed(FileDialog.FILE_MODE_OPEN_FILE)
+
+
+func _on_save_button_pressed() -> void:
+	if _using_external_file && !_tracklist_file.is_empty():
+		_save_tracklist(_tracklist_file)
+	else:
+		_on_file_buttons_pressed(FileDialog.FILE_MODE_SAVE_FILE)
+
+
+func _on_save_as_button_pressed() -> void:
+	_on_file_buttons_pressed(FileDialog.FILE_MODE_SAVE_FILE)
+
+
+func _on_file_buttons_pressed(fm: FileDialog.FileMode) -> void:
+	_tracklist_file_dialogue.file_mode = fm
 	_tracklist_file_dialogue.popup_centered_ratio()
 	_load_button.disabled = true
 	_save_button.disabled = true
@@ -104,7 +126,7 @@ func _on_track_list_load_dialogue_canceled() -> void:
 	_saveas_button.disabled = false
 
 
-func _on_track_list_load_dialogue_file_selected(path: String) -> void:
+func _on_track_list_load_dialogue_file_selected(path: StringName) -> void:
 	_on_track_list_load_dialogue_canceled()
 
 	_tracklist_label.text = path
@@ -112,10 +134,27 @@ func _on_track_list_load_dialogue_file_selected(path: String) -> void:
 	_using_external_file = true
 	_tracklist_file = path
 
-	_music_player.load_tracklist(path)
-	_clear_layers()
-	_clear_tracks()
-	_load_tracks()
+	if _tracklist_file_dialogue.file_mode == FileDialog.FILE_MODE_OPEN_FILE:
+		_music_player.load_tracklist(path)
+		_clear_layers()
+		_clear_tracks()
+		_load_tracks()
+	elif _tracklist_file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
+		_save_tracklist(path)
+
+
+func _save_tracklist(path: StringName) -> void:
+	var write_to = FileAccess.open(path, FileAccess.WRITE)
+	var dic: Dictionary = {
+		"version": 1,
+		"tracks": []
+	}
+
+	for t: TrackInfo in _music_player.tracklist.values():
+		dic["tracks"].append(t.serialize())
+	
+	var json_string = JSON.stringify(dic)
+	write_to.store_line(json_string)
 
 
 func _clear_layers() -> void:

@@ -6,3 +6,12 @@ var artist: String
 var bpm: float
 var layer_count: int
 var stream: Array
+
+
+func serialize() -> Dictionary:
+	return {
+		"name": name,
+		"artist": artist,
+		"bpm": bpm,
+		"stream": stream
+	}
