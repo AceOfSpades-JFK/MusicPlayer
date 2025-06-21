@@ -14,8 +14,10 @@ signal mute_toggled(toggled_on: bool, layer_index: int)
 
 
 func _ready() -> void:
-	_name_label.text = track_info.stream[layer_index]
+	if track_info:
+		_name_label.text = track_info.stream[layer_index]
 
 
 func _on_mute_box_toggled(toggled_on: bool) -> void:
-	mute_toggled.emit(toggled_on, layer_index)
+	if track_info:
+		mute_toggled.emit(toggled_on, layer_index)

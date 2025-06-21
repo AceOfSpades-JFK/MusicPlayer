@@ -1,6 +1,7 @@
 extends Node
 class_name MusicPlayer
 
+const CURRENT_VERSION: int = 1
 const PATH_TO_TRACKLIST: String = "res://tracklist.json"
 
 # 0.0 --------------------- 1.0
@@ -11,8 +12,8 @@ const MAX_DB = 0.0
 const MIN_DB = -80.0
 
 ### The audio bus to use for the music
-@export var bus: String = "Music"
-@export var json_path: String = PATH_TO_TRACKLIST
+@export var bus: StringName = "Music"
+@export var json_path: StringName = PATH_TO_TRACKLIST
 
 ### The tracklist for the current project
 var tracklist: Dictionary
@@ -20,23 +21,16 @@ var _current_track: Track
 
 signal loaded_tracklist
 signal unloaded_tracklist
-signal loaded_track(track_name: String)
-signal unloaded_track(unloaded_track_name: String)
+signal loaded_track(track_name: StringName)
+signal unloaded_track(unloaded_track_name: StringName)
 
 
-func _ready():
-	load_tracklist(PATH_TO_TRACKLIST)
+# func _ready():
+# 	load_tracklist(PATH_TO_TRACKLIST)
 
 
 ### Load the tracklist
-func load_tracklist(filepath: String) -> bool:
-	# Clear the tracklist if it exists
-	if !tracklist.is_empty():
-		tracklist.clear()
-	
-	# Unload the current track
-	unload_track()
-
+func load_tracklist(filepath: StringName) -> bool:
 	# Load the JSON file as a string
 	var file = FileAccess.open(filepath, FileAccess.READ)
 	if !file:
@@ -46,11 +40,22 @@ func load_tracklist(filepath: String) -> bool:
 	
 	# Parse the JSON file
 	var json = JSON.new()
+	var newTracklist: Dictionary
 	if json.parse(content) == OK:
 		var data = json.data
-		var tracks = data["tracks"]
+
+		# Format checking
+		if !data.has("tracks") || !data.has("version"):
+			push_error("Improper formatting for tracklist at %s" % filepath)
+			return false
+		if data["version"] > CURRENT_VERSION:
+			push_error("Incompatible version for tracklist at %s!" % filepath)
+			return false
+		if data["version"] < CURRENT_VERSION:
+			push_warning("Tracklist at %s is an older version. Here be dragons!" % filepath)
 
 		# Loop through all the tracks and put them in the tracklist dictionary
+		var tracks = data["tracks"]
 		for t in tracks:
 			var newTrack = TrackInfo.new()
 			newTrack.name = t["name"]
@@ -58,14 +63,23 @@ func load_tracklist(filepath: String) -> bool:
 			newTrack.bpm = t["bpm"]
 			newTrack.stream = t["stream"]
 			newTrack.layer_count = t["stream"].size()
-			tracklist[newTrack.name] = newTrack
+			newTracklist[newTrack.name] = newTrack
 			
 	else:
-		printerr("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
+		push_error("JSON Parse Error: ", json.get_error_message(), " in ", file, " at line ", json.get_error_line())
 		return false
 	
 	loaded_tracklist.emit()
 	json_path = filepath
+	
+	# Clear the tracklist if it exists
+	if !tracklist.is_empty():
+		tracklist.clear()
+	
+	# Unload the current track
+	unload_track()
+
+	tracklist = newTracklist
 	return true
 
 

@@ -107,6 +107,7 @@ func _ready():
 
 
 func _process(_delta):
+	# Emit the beat_passed signal upon every beat
 	if playing && !stream_paused:
 		var t = _time + _delta
 		if (fmod(_time, _spb) <= fmod(t, _spb)):
