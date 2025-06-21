@@ -5,7 +5,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl4xw"]
 bg_color = Color(0, 0, 0, 0.129412)
 
-[node name="TrackLayerPanel" type="MarginContainer" node_paths=PackedStringArray("_name_label", "_meta_label", "_mute_button")]
+[node name="TrackLayerPanel" type="MarginContainer" node_paths=PackedStringArray("_name_label", "_meta_label", "_mute_button", "_menu_button")]
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
@@ -15,6 +15,7 @@ script = ExtResource("1_78ls3")
 _name_label = NodePath("BoxContainer/LayerInfo/FileContents/Name")
 _meta_label = NodePath("BoxContainer/LayerInfo/FileContents/Meta")
 _mute_button = NodePath("BoxContainer/LayerControls/MuteBox")
+_menu_button = NodePath("BoxContainer/LayerControls/MenuButton")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
@@ -52,14 +53,11 @@ text = "Mute"
 [node name="MenuButton" type="MenuButton" parent="BoxContainer/LayerControls"]
 layout_mode = 2
 text = "..."
-item_count = 3
-popup/item_0/text = "Looped"
-popup/item_0/checkable = 1
-popup/item_0/checked = true
-popup/item_0/id = 2
-popup/item_1/text = "Settings"
+item_count = 2
+popup/item_0/text = "Settings"
+popup/item_0/id = 1
+popup/item_0/disabled = true
+popup/item_1/text = "Remove"
 popup/item_1/id = 1
-popup/item_2/text = "Remove"
-popup/item_2/id = 1
 
 [connection signal="toggled" from="BoxContainer/LayerControls/MuteBox" to="." method="_on_mute_box_toggled"]

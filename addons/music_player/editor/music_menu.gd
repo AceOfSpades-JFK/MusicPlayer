@@ -7,16 +7,16 @@ var _create_track_ps: PackedScene = preload("res://addons/music_player/editor/cr
 
 var _music_player: MusicPlayer
 
-@export var _track_container_path: NodePath
-@export var _layer_container_path: NodePath
-@export var _tracklist_file_dialogue_path: NodePath
-@export var _stream_layer_dialogue_path: NodePath
-@export var _load_button_path: NodePath
-@export var _save_button_path: NodePath
-@export var _saveas_button_path: NodePath
-@export var _tracklist_label_path: NodePath
-@export var _controls_path: NodePath
-@export var _window_path: NodePath
+var _track_container_path: NodePath = "SplitContainer/Tracklist/BoxContainer/TrackContainer"
+var _layer_container_path: NodePath = "SplitContainer/WorkArea/MarginContainer/VBoxContainer2/LayerContainer"
+var _tracklist_file_dialogue_path: NodePath = "TrackListLoadDialogue"
+var _stream_layer_dialogue_path: NodePath = "StreamLayerLoadDialogue"
+var _load_button_path: NodePath = "SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton"
+var _save_button_path: NodePath = "SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveButton"
+var _saveas_button_path: NodePath = "SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveAsButton"
+var _tracklist_label_path: NodePath = "SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/TracklistLabel"
+var _controls_path: NodePath = "SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls"
+var _window_path: NodePath = "Window"
 
 @onready var _track_container: Container = get_node(_track_container_path)
 @onready var _layer_container: Container = get_node(_layer_container_path)
@@ -72,6 +72,7 @@ func _add_track_layer_panel(t: TrackInfo, i: int) -> void:
 	p.track_info = t
 	p.layer_index = i
 	p.mute_toggled.connect(_on_layer_mute_toggled)
+	p.removal_requested.connect(_on_layer_remove_requested)
 	_layer_container.add_child(p)
 
 
@@ -206,3 +207,9 @@ func _on_stream_layer_dialogue_file_selected(path: String) -> void:
 	_dirty_tracklist = true
 	_on_track_list_load_dialogue_canceled()
 	
+
+func _on_layer_remove_requested(index: int) -> void:
+	_current_track.track_info.stream.remove_at(index)
+	_on_track_open(_current_track.track_info.name)
+	_dirty_tracklist = true
+	_on_track_list_load_dialogue_canceled()

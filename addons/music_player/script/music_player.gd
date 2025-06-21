@@ -84,18 +84,10 @@ func load_tracklist(filepath: StringName) -> bool:
 	tracklist = newTracklist
 	return true
 
-
-func _is_track_dictionary_valid(t: Dictionary) -> bool:
-	var keys = ['name', 'artist', 'bpm', 'stream']
-	return t.keys().all(func(k): return keys.has(k))
-
-
+### Adds a new track to the tracklist
+#	t: Info of the track you want to add
 func add_track(t: TrackInfo) -> void:
 	tracklist[t.name] = t
-
-
-func add_track_layer(s: StringName) -> void:
-	tracklist[_current_track.name].stream.add(s)
 
 
 ### Loads a track from tracklist.json and sets it as the current track.
@@ -208,6 +200,11 @@ func get_current_track() -> Track:
 #
 #	Private functions
 #
+
+
+func _is_track_dictionary_valid(t: Dictionary) -> bool:
+	var keys = ['name', 'artist', 'bpm', 'stream']
+	return t.keys().all(func(k): return keys.has(k))
 
 
 func _get_loaded_track(trackname: String) -> Track:

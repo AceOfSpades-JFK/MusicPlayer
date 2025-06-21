@@ -133,6 +133,8 @@ func pause() -> void:
 	stream_paused = !stream_paused
 
 
+### Seeks the current track to the passed in time
+#	t: Time (in seconds) to seek the track to
 func seek(t: float) -> void:
 	_stream.seek(t)
 	_time = t

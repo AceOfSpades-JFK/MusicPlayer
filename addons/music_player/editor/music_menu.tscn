@@ -14,16 +14,6 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_8vcda")
-_track_container_path = NodePath("SplitContainer/Tracklist/BoxContainer/TrackContainer")
-_layer_container_path = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/LayerContainer")
-_tracklist_file_dialogue_path = NodePath("TrackListLoadDialogue")
-_stream_layer_dialogue_path = NodePath("StreamLayerLoadDialogue")
-_load_button_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton")
-_save_button_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveButton")
-_saveas_button_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveAsButton")
-_tracklist_label_path = NodePath("SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/TracklistLabel")
-_controls_path = NodePath("SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls")
-_window_path = NodePath("Window")
 
 [node name="SplitContainer" type="SplitContainer" parent="."]
 layout_mode = 1
@@ -124,7 +114,7 @@ filters = PackedStringArray("*.json")
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
-filters = PackedStringArray("Audio Files", "audio/mp3,audio/ogg,audio/wav,audio/flac", "*.wav,*.mp3,*.ogg,*.flac")
+filters = PackedStringArray("*.wav,*.mp3,*.ogg,*.flac")
 
 [node name="Window" type="Window" parent="."]
 title = "Create new track"
