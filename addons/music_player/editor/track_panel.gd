@@ -15,10 +15,10 @@ var track_info: TrackInfo
 
 
 func _ready() -> void:
-	_name_label.text = track_info.name
-	_meta_label.text = "%s \n%sBPM" % [track_info.artist, track_info.bpm]
+	if track_info:
+		_name_label.text = track_info.name
+		_meta_label.text = "%s \n%sBPM" % [track_info.artist, track_info.bpm]
 	_menu_button.get_popup().id_pressed.connect(_on_menu_button_pressed)
-	pass
 
 
 func _on_open_button_pressed() -> void:

@@ -116,15 +116,8 @@ ok_button_text = "Open"
 file_mode = 0
 filters = PackedStringArray("*.wav,*.mp3,*.ogg,*.flac")
 
-[node name="Window" type="Window" parent="."]
-title = "Create new track"
-position = Vector2i(0, 36)
-size = Vector2i(300, 175)
+[node name="CreateTrackDialogue" parent="." instance=ExtResource("3_rbxs4")]
 visible = false
-transient = true
-exclusive = true
-
-[node name="CreateTrackDialogue" parent="Window" instance=ExtResource("3_rbxs4")]
 
 [connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
@@ -133,5 +126,6 @@ exclusive = true
 [connection signal="canceled" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_canceled"]
 [connection signal="file_selected" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_file_selected"]
 [connection signal="file_selected" from="StreamLayerLoadDialogue" to="." method="_on_stream_layer_dialogue_file_selected"]
-[connection signal="cancelled" from="Window/CreateTrackDialogue" to="." method="_on_create_track_cancelled"]
-[connection signal="created" from="Window/CreateTrackDialogue" to="." method="_on_create_track_created"]
+[connection signal="cancelled" from="CreateTrackDialogue" to="." method="_on_create_track_cancelled"]
+[connection signal="close_requested" from="CreateTrackDialogue" to="." method="_on_create_track_cancelled"]
+[connection signal="created" from="CreateTrackDialogue" to="." method="_on_create_track_created"]

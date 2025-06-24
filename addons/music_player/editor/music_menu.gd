@@ -16,7 +16,7 @@ var _save_button_path: NodePath = "SplitContainer/Tracklist/BoxContainer/Trackli
 var _saveas_button_path: NodePath = "SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveAsButton"
 var _tracklist_label_path: NodePath = "SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/TracklistLabel"
 var _controls_path: NodePath = "SplitContainer/WorkArea/MarginContainer/VBoxContainer2/Controls"
-var _window_path: NodePath = "Window"
+var _create_window_path: NodePath = "CreateTrackDialogue"
 
 @onready var _track_container: Container = get_node(_track_container_path)
 @onready var _layer_container: Container = get_node(_layer_container_path)
@@ -188,18 +188,18 @@ func _on_add_layer_button_pressed() -> void:
 
 
 func _on_create_track_button_pressed() -> void:
-	var w: Window = get_node(_window_path)
+	var w: Window = get_node(_create_window_path)
 	w.popup_centered()
 
 
 func _on_create_track_cancelled() -> void:
-	get_node(_window_path).hide()
+	get_node(_create_window_path).hide()
 
 
 func _on_create_track_created(t: TrackInfo) -> void:
 	_music_player.add_track(t)
 	_add_track_panel(t)
-	get_node(_window_path).hide()
+	get_node(_create_window_path).hide()
 	_dirty_tracklist = true
 	_on_track_list_load_dialogue_canceled()
 
