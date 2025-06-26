@@ -2,16 +2,22 @@
 
 [ext_resource type="Script" path="res://addons/music_player/editor/create_track_dialogue.gd" id="1_iwomk"]
 
-[node name="CreateTrackDialogue" type="Window"]
+[node name="CreateTrackDialogue" type="ConfirmationDialog"]
+title = "Create new track"
 initial_position = 1
-size = Vector2i(320, 210)
-transient = true
+size = Vector2i(320, 240)
+visible = true
+ok_button_text = "Create"
 script = ExtResource("1_iwomk")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -27,7 +33,6 @@ vertical = true
 
 [node name="BoxContainer" type="BoxContainer" parent="MarginContainer/BoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = -95
 
 [node name="FieldContainer" type="BoxContainer" parent="MarginContainer/BoxContainer/BoxContainer"]
 layout_mode = 2
@@ -73,21 +78,3 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 6
 text = "BPM"
-
-[node name="ButtonsContainer" type="BoxContainer" parent="MarginContainer/BoxContainer"]
-layout_mode = 2
-
-[node name="CancelButton" type="Button" parent="MarginContainer/BoxContainer/ButtonsContainer"]
-layout_mode = 2
-text = "Cancel"
-
-[node name="Control" type="Control" parent="MarginContainer/BoxContainer/ButtonsContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CreateButton" type="Button" parent="MarginContainer/BoxContainer/ButtonsContainer"]
-layout_mode = 2
-text = "Create Track!"
-
-[connection signal="pressed" from="MarginContainer/BoxContainer/ButtonsContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
-[connection signal="pressed" from="MarginContainer/BoxContainer/ButtonsContainer/CreateButton" to="." method="_on_create_button_pressed"]

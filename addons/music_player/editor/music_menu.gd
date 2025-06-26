@@ -196,7 +196,8 @@ func _on_create_track_cancelled() -> void:
 	get_node(_create_window_path).hide()
 
 
-func _on_create_track_created(t: TrackInfo) -> void:
+func _on_create_track_created() -> void:
+	var t: TrackInfo = get_node(_create_window_path).call("generate_track_info")
 	_music_player.add_track(t)
 	_add_track_panel(t)
 	get_node(_create_window_path).hide()

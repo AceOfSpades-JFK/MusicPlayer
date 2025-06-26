@@ -126,6 +126,5 @@ visible = false
 [connection signal="canceled" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_canceled"]
 [connection signal="file_selected" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_file_selected"]
 [connection signal="file_selected" from="StreamLayerLoadDialogue" to="." method="_on_stream_layer_dialogue_file_selected"]
-[connection signal="cancelled" from="CreateTrackDialogue" to="." method="_on_create_track_cancelled"]
 [connection signal="close_requested" from="CreateTrackDialogue" to="." method="_on_create_track_cancelled"]
-[connection signal="created" from="CreateTrackDialogue" to="." method="_on_create_track_created"]
+[connection signal="confirmed" from="CreateTrackDialogue" to="." method="_on_create_track_created"]
