@@ -34,6 +34,7 @@ var _first_play: bool = false
 var _dragging: bool = false
 var _dirty_tracklist: bool = false
 var _window: Window
+var _track_info_dialog: ConfirmationDialog
 
 var _current_track: Track:
 	get:
@@ -188,19 +189,21 @@ func _on_add_layer_button_pressed() -> void:
 
 
 func _on_create_track_button_pressed() -> void:
-	var w: Window = get_node(_create_window_path)
-	w.popup_centered()
+	_track_info_dialog = _create_track_ps.instantiate()
+	_track_info_dialog.connect("created", _on_create_track_created)
+	_track_info_dialog.close_requested.connect(_on_create_track_cancelled)
+	add_child(_track_info_dialog)
+	_track_info_dialog.popup_centered()
 
 
 func _on_create_track_cancelled() -> void:
-	get_node(_create_window_path).hide()
+	_track_info_dialog.queue_free()
 
 
-func _on_create_track_created() -> void:
-	var t: TrackInfo = get_node(_create_window_path).call("generate_track_info")
+func _on_create_track_created(t: TrackInfo) -> void:
 	_music_player.add_track(t)
 	_add_track_panel(t)
-	get_node(_create_window_path).hide()
+	_track_info_dialog.queue_free()
 	_dirty_tracklist = true
 	_on_track_list_load_dialogue_canceled()
 

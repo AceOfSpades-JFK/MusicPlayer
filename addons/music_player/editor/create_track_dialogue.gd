@@ -1,3 +1,4 @@
+@tool
 extends ConfirmationDialog
 
 @onready var _name_edit: TextEdit	= %NameEdit
@@ -17,7 +18,7 @@ func _on_cancel_button_pressed() -> void:
 	_clear_fields()
 
 
-func generate_track_info() -> TrackInfo:
+func _generate_track_info() -> TrackInfo:
 	var t: TrackInfo = TrackInfo.new()
 	t.name = _name_edit.text
 	t.artist = _artist_edit.text
@@ -26,7 +27,7 @@ func generate_track_info() -> TrackInfo:
 
 
 func _on_create_button_pressed() -> void:
-	var t = generate_track_info()
+	created.emit(_generate_track_info())
 	_on_cancel_button_pressed()
 
 
