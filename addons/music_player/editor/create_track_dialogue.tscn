@@ -5,7 +5,7 @@
 [node name="CreateTrackDialog" type="ConfirmationDialog"]
 title = "Create new track"
 initial_position = 1
-size = Vector2i(450, 225)
+size = Vector2i(450, 249)
 visible = true
 ok_button_text = "Create"
 script = ExtResource("1_iwomk")
@@ -16,8 +16,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 442.0
-offset_bottom = 176.0
+offset_right = -8.0
+offset_bottom = -49.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -57,6 +57,12 @@ size_flags_horizontal = 8
 size_flags_vertical = 6
 text = "BPM"
 
+[node name="BeatCountLabel" type="Label" parent="MarginContainer/BoxContainer/BoxContainer/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 6
+text = "Beat Count"
+
 [node name="FieldContainer" type="BoxContainer" parent="MarginContainer/BoxContainer/BoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -74,6 +80,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="BPMEdit" type="TextEdit" parent="MarginContainer/BoxContainer/BoxContainer/FieldContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BeatCountEdit" type="TextEdit" parent="MarginContainer/BoxContainer/BoxContainer/FieldContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2

@@ -4,6 +4,7 @@
 		{
 			"name": "Regal",
 			"bpm": 160,
+			"beat_count": 4,
 			"artist": "Miguel, the Ace of Spades",
 			"stream": [
 				"res://demo/assets/music/regal1.ogg",
@@ -13,6 +14,7 @@
 		{
 			"name": "Hell",
 			"bpm": 160,
+			"beat_count": 4,
 			"artist": "Miguel, the Ace of Spades",
 			"stream": [
 				"res://demo/assets/music/hell1.ogg",

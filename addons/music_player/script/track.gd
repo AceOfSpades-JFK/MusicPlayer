@@ -21,11 +21,11 @@ var volume: float = 1.0 :
 
 var beat: int:
 	get:
-		return floori(_time / _spb) % _beat_count
+		return floori(_time / _spb) % beat_count
 
 var measure: int:
 	get:
-		return floori(_time / _spb) / _beat_count
+		return floori(_time / _spb) / beat_count
 
 var time: float:
 	get:
@@ -41,6 +41,9 @@ var bpm: float:
 var _spb: float:	# Seconds per beat
 	get(): return 60.0 / bpm
 
+var beat_count: int:			# Beats in a measure
+	get(): return track_info.beat_count
+
 var _stream: AudioStreamPlayer
 var _streamlist: AudioStreamSynchronized
 var _layer_volumes: Array[float]
@@ -49,8 +52,6 @@ var _layer_tweens: Array[Tween]
 
 var _time: float
 # TODO: Add support for user-defined time signatures
-var _beat_count: int		= 4	# Beats in a measure
-var _beat_denomination: int = 4	# What type of note counts as 1 beat
 
 var playing: bool = false :
 	set(val):

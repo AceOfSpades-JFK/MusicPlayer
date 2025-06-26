@@ -1,9 +1,10 @@
 @tool
 extends ConfirmationDialog
 
-@onready var _name_edit: TextEdit	= %NameEdit
-@onready var _artist_edit: TextEdit	= %ArtistEdit
-@onready var _bpm_edit: TextEdit	= %BPMEdit
+@onready var _name_edit: TextEdit		= %NameEdit
+@onready var _artist_edit: TextEdit		= %ArtistEdit
+@onready var _bpm_edit: TextEdit		= %BPMEdit
+@onready var _beat_count_edit: TextEdit	= %BeatCountEdit
 
 signal created(t: TrackInfo)
 
@@ -12,6 +13,7 @@ func set_fields(t: TrackInfo) -> void:
 	_name_edit.text = t.name
 	_artist_edit.text = t.artist
 	_bpm_edit.text = str(t.bpm)
+	_beat_count_edit.text = str(t.beat_count)
 
 
 func _ready() -> void:
@@ -29,6 +31,7 @@ func _generate_track_info() -> TrackInfo:
 	t.name = _name_edit.text
 	t.artist = _artist_edit.text
 	t.bpm = _bpm_edit.text.to_float()
+	t.beat_count = _beat_count_edit.text.to_int()
 	return t
 
 

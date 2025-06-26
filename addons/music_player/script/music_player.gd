@@ -64,6 +64,7 @@ func load_tracklist(filepath: StringName) -> bool:
 			newTrack.name = t["name"]
 			newTrack.artist = t["artist"]
 			newTrack.bpm = t["bpm"]
+			newTrack.beat_count = t["beat_count"]
 			newTrack.stream = t["stream"]
 			newTracklist[newTrack.name] = newTrack
 			
@@ -243,7 +244,7 @@ func get_current_track() -> Track:
 
 
 func _is_track_dictionary_valid(t: Dictionary) -> bool:
-	var keys = ['name', 'artist', 'bpm', 'stream']
+	var keys = ['name', 'artist', 'bpm', 'beat_count', 'stream']
 	return t.keys().all(func(k): return keys.has(k))
 
 
