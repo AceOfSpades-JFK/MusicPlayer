@@ -5,7 +5,7 @@ extends ConfirmationDialog
 @onready var _artist_edit: TextEdit	= %ArtistEdit
 @onready var _bpm_edit: TextEdit	= %BPMEdit
 
-signal created(t: TrackInfo)
+signal applied(t: TrackInfo)
 
 
 func set_fields(t: TrackInfo) -> void:
@@ -33,7 +33,7 @@ func _generate_track_info() -> TrackInfo:
 
 
 func _on_create_button_pressed() -> void:
-	created.emit(_generate_track_info())
+	applied.emit(_generate_track_info())
 	_on_cancel_button_pressed()
 
 

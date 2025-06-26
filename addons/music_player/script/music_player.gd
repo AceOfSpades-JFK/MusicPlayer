@@ -87,10 +87,18 @@ func load_tracklist(filepath: StringName) -> bool:
 
 ### Adds a new track to the tracklist
 #	t: Info of the track you want to add
-func add_track(t: TrackInfo) -> void:
+#	Returns true upon success
+func add_track(t: TrackInfo) -> bool:
+	if tracklist.has(t.name):
+		return false
+	
 	tracklist[t.name] = t
+	return true
 
 
+### Removes a track based on the passed track name
+#	tn: Name of the track you want removed
+#	Returns the removed track info
 func remove_track(tn: StringName) -> TrackInfo:
 	if tracklist.has(tn):
 		var ti: TrackInfo = tracklist[tn]
@@ -98,7 +106,20 @@ func remove_track(tn: StringName) -> TrackInfo:
 		if _current_track && _current_track.track_info.name == tn:
 			unload_track()
 		return ti
+	return null
 
+
+### Modifies a track with the passed in TrackInfo
+#	tn: Name of the track you want to modify
+#	ti: The track info to 
+#	Returns the modified track info
+func modify_track(tn: StringName, ti: TrackInfo) -> TrackInfo:
+	if tracklist.has(tn):
+		tracklist[tn].transfer(ti)
+		if tn != ti.name:
+			tracklist[ti.name] = tracklist[tn]
+			tracklist.erase(tn)
+		return tracklist[ti.name]
 	return null
 
 

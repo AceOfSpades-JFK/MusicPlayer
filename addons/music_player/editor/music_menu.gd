@@ -4,6 +4,7 @@ extends Control
 var _panel_ps: PackedScene = preload("res://addons/music_player/editor/track_layer_panel.tscn")
 var _track_ps: PackedScene = preload("res://addons/music_player/editor/track_panel.tscn")
 var _create_track_ps: PackedScene = preload("res://addons/music_player/editor/create_track_dialogue.tscn")
+var _edit_track_ps: PackedScene = preload("res://addons/music_player/editor/edit_track_dialogue.tscn")
 
 var _music_player: MusicPlayer
 
@@ -28,13 +29,14 @@ var _create_window_path: NodePath = "CreateTrackDialogue"
 @onready var _tracklist_label: Label = get_node(_tracklist_label_path)
 @onready var _controls: Control = get_node(_controls_path)
 
-var _tracklist_file = ""
+var _tracklist_file: StringName = ""
 var _playing: bool = false
 var _first_play: bool = false
 var _dragging: bool = false
 var _dirty_tracklist: bool = false
 var _window: Window
 var _track_info_dialog: ConfirmationDialog
+var _track_editing: StringName = ""
 
 var _current_track: Track:
 	get:
@@ -51,10 +53,11 @@ func _enter_tree() -> void:
 
 
 func _add_track_panel(t: TrackInfo) -> void:
-	var p: TrackPanel = _track_ps.instantiate()
+	var p = _track_ps.instantiate()
 	p.track_info = t
 	p.open.connect(_on_track_open)
 	p.remove_requested.connect(_on_track_removed)
+	p.edit_requested.connect(_on_track_editing)
 	_track_container.add_child(p)
 
 
@@ -100,7 +103,7 @@ func _on_layer_mute_toggled(muted: bool, layer_index: int) -> void:
 		_current_track.set_layer_volume(layer_index, 1.0)
 	
 
-func _on_track_open(tn: String) -> void:
+func _on_track_open(tn: StringName) -> void:
 	# Load the current track and stop playing the previous one
 	if (!_music_player.load_track(tn, 1.0, false)):
 		return
@@ -205,6 +208,29 @@ func _on_create_track_created(t: TrackInfo) -> void:
 	_add_track_panel(t)
 	_track_info_dialog.queue_free()
 	_dirty_tracklist = true
+	_track_editing = ""
+	_on_track_list_load_dialogue_canceled()
+
+
+func _on_edit_track_applied(t: TrackInfo) -> void:
+	# Maybe I should be doing this a different way...
+	var tt = _music_player.tracklist[_track_editing]
+	t.stream = tt.stream
+	_music_player.modify_track(_track_editing, t)
+
+	# if _track_editing != t.name:
+	# 	_music_player.tracklist[t.name] = _music_player.tracklist[_track_editing]
+	# 	_music_player.tracklist.erase(_track_editing)
+
+	# Just reprint the track infos
+	for c: Node in _track_container.get_children():
+		if c.has_method("reprint_track_info"):
+			c.call("reprint_track_info")
+
+	_controls.set("track", _controls.get("track"))
+	_track_info_dialog.queue_free()
+	_dirty_tracklist = true
+	_track_editing = ""
 	_on_track_list_load_dialogue_canceled()
 
 
@@ -222,7 +248,7 @@ func _on_layer_remove_requested(index: int) -> void:
 	_on_track_list_load_dialogue_canceled()
 
 
-func _on_track_removed(tn: String):
+func _on_track_removed(tn: StringName):
 	if _current_track && tn == _current_track.track_info.name:
 		_clear_layers()
 		
@@ -231,3 +257,14 @@ func _on_track_removed(tn: String):
 	_load_tracks()
 	_dirty_tracklist = true
 	_on_track_list_load_dialogue_canceled()
+
+
+func _on_track_editing(tn: StringName) -> void:
+	_track_editing = tn
+	
+	_track_info_dialog = _edit_track_ps.instantiate()
+	_track_info_dialog.connect("applied", _on_edit_track_applied)
+	_track_info_dialog.close_requested.connect(_on_create_track_cancelled)
+	add_child(_track_info_dialog)
+	_track_info_dialog.call("set_fields", _music_player.tracklist[tn])
+	_track_info_dialog.popup_centered()

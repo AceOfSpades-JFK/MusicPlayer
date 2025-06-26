@@ -1,8 +1,8 @@
 extends Resource
 class_name TrackInfo
 
-var name: String
-var artist: String
+var name: StringName
+var artist: StringName
 var bpm: float
 var stream: Array
 
@@ -16,3 +16,10 @@ func serialize() -> Dictionary:
 		"bpm": bpm,
 		"stream": stream
 	}
+
+
+func transfer(t: TrackInfo) -> void:
+	name = t.name
+	artist = t.artist
+	bpm = t.bpm
+	stream = t.stream

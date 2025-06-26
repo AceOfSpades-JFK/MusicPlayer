@@ -47,8 +47,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "..."
 item_count = 2
-popup/item_0/text = "Settings"
-popup/item_0/disabled = true
+popup/item_0/text = "Edit"
 popup/item_1/text = "Remove"
 popup/item_1/id = 1
 

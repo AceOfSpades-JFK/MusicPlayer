@@ -35,14 +35,18 @@ var length: float:
 	get:
 		return _streamlist.get_length()
 
+var bpm: float:
+	get(): return track_info.bpm
+
+var _spb: float:	# Seconds per beat
+	get(): return 60.0 / bpm
+
 var _stream: AudioStreamPlayer
 var _streamlist: AudioStreamSynchronized
 var _layer_volumes: Array[float]
 var _tween: Tween
 var _layer_tweens: Array[Tween]
 
-var _bpm: float
-var _spb: float		# Seconds per beat
 var _time: float
 # TODO: Add support for user-defined time signatures
 var _beat_count: int		= 4	# Beats in a measure
@@ -84,10 +88,6 @@ func _ready():
 		_stream.name = track_info.name
 		_stream.bus = MUSIC_PLAYER_BUS
 		add_child(_stream)
-
-		# Set up time measurement
-		_bpm = track_info.bpm
-		_spb = 60.0 / _bpm
 
 		# Create the AudioStreamSynchronized streamlist
 		var i = 0
