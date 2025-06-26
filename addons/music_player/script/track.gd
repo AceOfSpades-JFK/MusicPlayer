@@ -51,7 +51,7 @@ var _tween: Tween
 var _layer_tweens: Array[Tween]
 
 var _time: float
-# TODO: Add support for user-defined time signatures
+var _prev_time: float
 
 var playing: bool = false :
 	set(val):
@@ -110,10 +110,10 @@ func _ready():
 func _process(_delta):
 	# Emit the beat_passed signal upon every beat
 	if playing && !stream_paused:
-		var t = _time + _delta
-		if (fmod(_time, _spb) <= fmod(t, _spb)):
+		_time = _stream.get_playback_position()
+		if (fmod(_prev_time, _spb) <= fmod(_time, _spb)):
 			beat_passed.emit(_time, beat, measure)
-		_time = t
+		_prev_time = _time
 # 	# Apply the global and layer volumes
 # 	if _tween.is_running():
 # 		_apply_volume()
