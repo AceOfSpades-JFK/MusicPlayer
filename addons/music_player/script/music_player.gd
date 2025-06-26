@@ -83,13 +83,20 @@ func load_tracklist(filepath: StringName) -> bool:
 
 	tracklist = newTracklist
 	return true
+
+
+### Checks if the tracklist has a track that goes by the passed in name
+#	tn: The name of the track you want to check for
+#	Returns true if the tracklist has that track
+func has_track(tn: StringName) -> bool:
+	return tracklist.has(tn)
 	
 
 ### Adds a new track to the tracklist
 #	t: Info of the track you want to add
 #	Returns true upon success
 func add_track(t: TrackInfo) -> bool:
-	if tracklist.has(t.name):
+	if has_track(t.name):
 		return false
 	
 	tracklist[t.name] = t
@@ -100,7 +107,7 @@ func add_track(t: TrackInfo) -> bool:
 #	tn: Name of the track you want removed
 #	Returns the removed track info
 func remove_track(tn: StringName) -> TrackInfo:
-	if tracklist.has(tn):
+	if has_track(tn):
 		var ti: TrackInfo = tracklist[tn]
 		tracklist.erase(tn)
 		if _current_track && _current_track.track_info.name == tn:
@@ -114,7 +121,7 @@ func remove_track(tn: StringName) -> TrackInfo:
 #	ti: The track info to 
 #	Returns the modified track info
 func modify_track(tn: StringName, ti: TrackInfo) -> TrackInfo:
-	if tracklist.has(tn):
+	if has_track(tn):
 		tracklist[tn].transfer(ti)
 		if tn != ti.name:
 			tracklist[ti.name] = tracklist[tn]
@@ -129,7 +136,7 @@ func modify_track(tn: StringName, ti: TrackInfo) -> TrackInfo:
 #	autoplay: Should the track play upon loading (default is true)
 #	Returns true on success
 func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> bool:
-	if tracklist.has(trackname):
+	if has_track(trackname):
 		#if _current_track && _current_track.name == trackname:
 			## Ignore if the provided track is already the thing
 			#print("Track (" + trackname + ") is already loaded!")
@@ -165,7 +172,7 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 	var queue_current_track_free: Callable = func():
 		unloaded_track.emit(old_t)
 
-	if tracklist.has(trackname):
+	if has_track(trackname):
 		# Fade out the old track
 		if _current_track:
 			# Return if the provided trackname is the current track!

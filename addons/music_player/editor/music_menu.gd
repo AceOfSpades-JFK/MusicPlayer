@@ -34,7 +34,7 @@ var _playing: bool = false
 var _first_play: bool = false
 var _dragging: bool = false
 var _dirty_tracklist: bool = false
-var _window: Window
+var _accept_dialog: AcceptDialog
 var _track_info_dialog: ConfirmationDialog
 var _track_editing: StringName = ""
 
@@ -204,23 +204,43 @@ func _on_create_track_cancelled() -> void:
 
 
 func _on_create_track_created(t: TrackInfo) -> void:
-	_music_player.add_track(t)
-	_add_track_panel(t)
 	_track_info_dialog.queue_free()
-	_dirty_tracklist = true
-	_track_editing = ""
+	if _music_player.add_track(t):
+		_add_track_panel(t)
+		_dirty_tracklist = true
+		_track_editing = ""
+	else:
+		_popup_accept_dialog("Track %s already exists!" % t.name)
 	_on_track_list_load_dialogue_canceled()
 
 
+func _popup_accept_dialog(text: String):
+	_accept_dialog = AcceptDialog.new()
+	_accept_dialog.dialog_text = text
+	add_child(_accept_dialog)
+	_accept_dialog.popup_centered()
+	_accept_dialog.confirmed.connect(_on_accept_dialog_confirmed)
+
+
+func _on_accept_dialog_confirmed() -> void:
+	_accept_dialog.queue_free()
+
+
 func _on_edit_track_applied(t: TrackInfo) -> void:
-	# Maybe I should be doing this a different way...
+	_track_info_dialog.queue_free()
+
+	# This prevents editing a track that's not the one the user is editing
+	if _track_editing != t.name && _music_player.has_track(t.name):
+		_popup_accept_dialog("Track %s already exists!" % t.name)
+		_on_track_list_load_dialogue_canceled()
+		return
+	
 	var tt = _music_player.tracklist[_track_editing]
 	t.stream = tt.stream
-	_music_player.modify_track(_track_editing, t)
-
-	# if _track_editing != t.name:
-	# 	_music_player.tracklist[t.name] = _music_player.tracklist[_track_editing]
-	# 	_music_player.tracklist.erase(_track_editing)
+	if !_music_player.modify_track(_track_editing, t):
+		_popup_accept_dialog("Track %s does not exist!" % _track_editing)
+		_on_track_list_load_dialogue_canceled()
+		return
 
 	# Just reprint the track infos
 	for c: Node in _track_container.get_children():
@@ -228,7 +248,6 @@ func _on_edit_track_applied(t: TrackInfo) -> void:
 			c.call("reprint_track_info")
 
 	_controls.set("track", _controls.get("track"))
-	_track_info_dialog.queue_free()
 	_dirty_tracklist = true
 	_track_editing = ""
 	_on_track_list_load_dialogue_canceled()
