@@ -205,11 +205,13 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 
 
 ### Unloads the current track.
-func unload_track() -> void:
+func unload_track() -> bool:
 	if _current_track:
 		unloaded_track.emit(_current_track.name)
 		_current_track.queue_free()
 		_current_track = null
+		return true
+	return false
 
 
 ### Plays the current track from the beginning.
