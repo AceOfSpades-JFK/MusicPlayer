@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://bb1vj0hsde3f5"]
+
+[ext_resource type="Script" path="res://addons/music_player/editor/track_panel.gd" id="1_53t21"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl4xw"]
+bg_color = Color(0, 0, 0, 0.129412)
+
+[node name="TrackPanel" type="MarginContainer" node_paths=PackedStringArray("_name_label", "_meta_label")]
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_53t21")
+_name_label = NodePath("HBoxContainer/MarginContainer/VBoxContainer/Name")
+_meta_label = NodePath("HBoxContainer/MarginContainer/VBoxContainer/Meta")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rl4xw")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Track Name"
+
+[node name="Meta" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "By Artist
+4:20 | 69BPM "
+
+[node name="MenuButton" type="MenuButton" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "..."
+item_count = 2
+popup/item_0/text = "Edit"
+popup/item_1/text = "Remove"
+popup/item_1/id = 1
+
+[node name="OpenButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = ">"
+
+[connection signal="pressed" from="HBoxContainer/OpenButton" to="." method="_on_open_button_pressed"]

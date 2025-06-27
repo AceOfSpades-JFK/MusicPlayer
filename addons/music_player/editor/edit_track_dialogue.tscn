@@ -1,0 +1,92 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddbmg3x7btu2k"]
+
+[ext_resource type="Script" path="res://addons/music_player/editor/edit_track_dialog.gd" id="1_1wwg8"]
+
+[node name="EditTrackDialog" type="ConfirmationDialog"]
+title = "Edit track"
+initial_position = 1
+size = Vector2i(450, 249)
+visible = true
+ok_button_text = "Apply"
+script = ExtResource("1_1wwg8")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 442.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BoxContainer" type="BoxContainer" parent="MarginContainer"]
+layout_mode = 2
+vertical = true
+
+[node name="BoxContainer" type="BoxContainer" parent="MarginContainer/BoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="LabelContainer" type="BoxContainer" parent="MarginContainer/BoxContainer/BoxContainer"]
+layout_mode = 2
+vertical = true
+
+[node name="NameLabel" type="Label" parent="MarginContainer/BoxContainer/BoxContainer/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 6
+text = "Name"
+
+[node name="ArtistLabel" type="Label" parent="MarginContainer/BoxContainer/BoxContainer/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 6
+text = "Artist"
+
+[node name="BPMLabel" type="Label" parent="MarginContainer/BoxContainer/BoxContainer/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 6
+text = "BPM"
+
+[node name="BeatCountLabel" type="Label" parent="MarginContainer/BoxContainer/BoxContainer/LabelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 6
+text = "Beat Count"
+
+[node name="FieldContainer" type="BoxContainer" parent="MarginContainer/BoxContainer/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+vertical = true
+
+[node name="NameEdit" type="TextEdit" parent="MarginContainer/BoxContainer/BoxContainer/FieldContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="ArtistEdit" type="TextEdit" parent="MarginContainer/BoxContainer/BoxContainer/FieldContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BPMEdit" type="TextEdit" parent="MarginContainer/BoxContainer/BoxContainer/FieldContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BeatCountEdit" type="TextEdit" parent="MarginContainer/BoxContainer/BoxContainer/FieldContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<linearGradient id="a" x2="0" y1="1" y2="15" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ff5f5f"/><stop offset=".5" stop-color="#e1da5b"/><stop offset="1" stop-color="#5fff97"/></linearGradient>
+<g clip-path="url(#clip0_429_11112)">
+<circle cx="12" cy="12" r="2" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="18" cy="9" r="2" stroke="url(#a)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15.318 3.63135C14.2913 3.22394 13.1718 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.1514 21 19.6464 18.1892 20.6855 14.3669" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20 9V2L22 4" stroke="url(#a)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_429_11112">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>

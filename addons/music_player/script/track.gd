@@ -1,8 +1,6 @@
+@icon("res://addons/music_player/assets/Track.svg")
 extends Node
 class_name Track
-
-const MUSIC_PLAYER_BUS: String = "Music"
-const PATH_TO_MUSIC: String = "res://asset/music/"
 
 # 0.0 --------------------- 1.0
 #  ^                         ^
@@ -19,6 +17,30 @@ var volume: float = 1.0 :
 		if (_stream):
 			_stream.volume_db = _calculate_db(val)
 
+var beat: int:
+	get:
+		return floori(_time / _spb) % beat_count
+
+var measure: int:
+	get:
+		return floori(_time / _spb) / beat_count
+
+var time: float:
+	get:
+		return _time
+
+var length: float:
+	get:
+		return _streamlist.get_length()
+
+var bpm: float:
+	get(): return track_info.bpm
+
+var _spb: float:	# Seconds per beat
+	get(): return 60.0 / bpm
+
+var beat_count: int:			# Beats in a measure
+	get(): return track_info.beat_count
 
 var _stream: AudioStreamPlayer
 var _streamlist: AudioStreamSynchronized
@@ -26,14 +48,20 @@ var _layer_volumes: Array[float]
 var _tween: Tween
 var _layer_tweens: Array[Tween]
 
+var _time: float
+var _prev_time: float
+
 var playing: bool = false :
 	set(val):
 		playing = val
 		if _stream:
 			if val:
 				_stream.play()
+				_time = 0
 			else:
+				stream_paused = false
 				_stream.stop()
+				_time = 0
 
 
 var stream_paused: bool = false :
@@ -43,6 +71,8 @@ var stream_paused: bool = false :
 			_stream.stream_paused = val
 
 signal fade_finished
+signal finished
+signal beat_passed(time: float, beat: int, measure: int)
 
 
 func _ready():
@@ -55,7 +85,7 @@ func _ready():
 		# Create the AudioStreamPlayer node
 		_stream = AudioStreamPlayer.new()
 		_stream.name = track_info.name
-		_stream.bus = MUSIC_PLAYER_BUS
+		_stream.bus = bus
 		add_child(_stream)
 
 		# Create the AudioStreamSynchronized streamlist
@@ -68,12 +98,20 @@ func _ready():
 			_streamlist.set_sync_stream(i, stream)
 			_streamlist.set_sync_stream_volume(i, _calculate_db(_layer_volumes[i]))
 			i += 1
+		
+		_stream.finished.connect(_on_stream_finished)
 	else:
 		printerr("No track info found!")
 		queue_free()
 
 
-# func _process(_delta):
+func _process(_delta):
+	# Emit the beat_passed signal upon every beat
+	if playing && !stream_paused:
+		_time = _stream.get_playback_position()
+		if (fmod(_prev_time, _spb) <= fmod(_time, _spb)):
+			beat_passed.emit(_time, beat, measure)
+		_prev_time = _time
 # 	# Apply the global and layer volumes
 # 	if _tween.is_running():
 # 		_apply_volume()
@@ -92,6 +130,13 @@ func stop() -> void:
 ### Pauses playback of the track layers
 func pause() -> void:
 	stream_paused = !stream_paused
+
+
+### Seeks the current track to the passed in time
+#	t: Time (in seconds) to seek the track to
+func seek(t: float) -> void:
+	_stream.seek(t)
+	_time = t
 
 
 ### Sets the volume of a layer to the provided normalized float volume
@@ -177,3 +222,8 @@ func _calculate_db(normal_volume: float) -> float:
 
 func _apply_volume() -> void:
 	pass
+
+
+func _on_stream_finished() -> void:
+	playing = false
+	finished.emit()

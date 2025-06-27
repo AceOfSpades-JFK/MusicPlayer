@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=3 uid="uid://beni82ibndav1"]
+
+[ext_resource type="Script" path="res://addons/music_player/editor/track_layer_panel.gd" id="1_78ls3"]
+[ext_resource type="Texture2D" uid="uid://ce35j3fbncctg" path="res://addons/music_player/assets/test-waveform.png" id="2_w3rbr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl4xw"]
+bg_color = Color(0, 0, 0, 0.129412)
+
+[node name="TrackLayerPanel" type="MarginContainer" node_paths=PackedStringArray("_name_label", "_meta_label", "_mute_button", "_menu_button")]
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+script = ExtResource("1_78ls3")
+_name_label = NodePath("BoxContainer/LayerInfo/FileContents/Name")
+_meta_label = NodePath("BoxContainer/LayerInfo/FileContents/Meta")
+_mute_button = NodePath("BoxContainer/LayerControls/MuteBox")
+_menu_button = NodePath("BoxContainer/LayerControls/MenuButton")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rl4xw")
+
+[node name="BoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="LayerInfo" type="HBoxContainer" parent="BoxContainer"]
+layout_mode = 2
+
+[node name="FileContents" type="VBoxContainer" parent="BoxContainer/LayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="BoxContainer/LayerInfo/FileContents"]
+layout_mode = 2
+text = "filename.ogg"
+
+[node name="Meta" type="Label" parent="BoxContainer/LayerInfo/FileContents"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="BoxContainer/LayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="BoxContainer/LayerInfo/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_w3rbr")
+expand_mode = 1
+
+[node name="LayerControls" type="HBoxContainer" parent="BoxContainer"]
+layout_mode = 2
+
+[node name="MuteBox" type="CheckBox" parent="BoxContainer/LayerControls"]
+layout_mode = 2
+text = "Mute"
+
+[node name="MenuButton" type="MenuButton" parent="BoxContainer/LayerControls"]
+layout_mode = 2
+text = "..."
+item_count = 2
+popup/item_0/text = "Settings"
+popup/item_0/id = 1
+popup/item_0/disabled = true
+popup/item_1/text = "Remove"
+popup/item_1/id = 1
+
+[connection signal="toggled" from="BoxContainer/LayerControls/MuteBox" to="." method="_on_mute_box_toggled"]

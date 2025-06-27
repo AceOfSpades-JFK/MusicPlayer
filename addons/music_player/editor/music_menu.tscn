@@ -1,0 +1,124 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjce1r2qed8px"]
+
+[ext_resource type="Script" path="res://addons/music_player/editor/music_menu.gd" id="1_8vcda"]
+[ext_resource type="PackedScene" uid="uid://vtblwcsagaqq" path="res://addons/music_player/editor/controls.tscn" id="2_5gm0s"]
+
+[node name="MusicMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_8vcda")
+
+[node name="SplitContainer" type="SplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+split_offset = -1000
+
+[node name="Tracklist" type="MarginContainer" parent="SplitContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="BoxContainer" type="BoxContainer" parent="SplitContainer/Tracklist"]
+layout_mode = 2
+vertical = true
+
+[node name="TracklistLoadContainer" type="BoxContainer" parent="SplitContainer/Tracklist/BoxContainer"]
+layout_mode = 2
+alignment = 2
+vertical = true
+
+[node name="TracklistLabel" type="Label" parent="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "No tracklist loaded..."
+text_overrun_behavior = 3
+
+[node name="BoxContainer" type="BoxContainer" parent="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer"]
+layout_mode = 2
+
+[node name="LoadButton" type="Button" parent="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer"]
+layout_mode = 2
+text = "Load..."
+
+[node name="SaveButton" type="Button" parent="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Save..."
+
+[node name="SaveAsButton" type="Button" parent="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer"]
+visible = false
+layout_mode = 2
+disabled = true
+text = "Save as..."
+
+[node name="HSeparator" type="HSeparator" parent="SplitContainer/Tracklist/BoxContainer"]
+layout_mode = 2
+
+[node name="TrackContainer" type="VBoxContainer" parent="SplitContainer/Tracklist/BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CreateTrackButton" type="Button" parent="SplitContainer/Tracklist/BoxContainer/TrackContainer"]
+layout_mode = 2
+text = "+ Create Track"
+
+[node name="WorkArea" type="MarginContainer" parent="SplitContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="SplitContainer/WorkArea"]
+layout_mode = 2
+color = Color(0, 0, 0, 0.12549)
+
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer/WorkArea"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer"]
+layout_mode = 2
+
+[node name="Controls" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2" instance=ExtResource("2_5gm0s")]
+layout_mode = 2
+
+[node name="LayerContainer" type="VBoxContainer" parent="SplitContainer/WorkArea/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TrackListLoadDialogue" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(303, 180)
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*.json")
+
+[node name="StreamLayerLoadDialogue" type="FileDialog" parent="."]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*.wav,*.mp3,*.ogg,*.flac")
+
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TracklistLoadContainer/BoxContainer/SaveAsButton" to="." method="_on_save_as_button_pressed"]
+[connection signal="pressed" from="SplitContainer/Tracklist/BoxContainer/TrackContainer/CreateTrackButton" to="." method="_on_create_track_button_pressed"]
+[connection signal="canceled" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_canceled"]
+[connection signal="file_selected" from="TrackListLoadDialogue" to="." method="_on_track_list_load_dialogue_file_selected"]
+[connection signal="file_selected" from="StreamLayerLoadDialogue" to="." method="_on_stream_layer_dialogue_file_selected"]
