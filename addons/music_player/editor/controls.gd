@@ -2,8 +2,7 @@
 extends MarginContainer
 
 @onready var _track_label: Label  = $MarginContainer/BoxContainer/TrackLabel
-@onready var _play_button: Button = $MarginContainer/BoxContainer/HBoxContainer/PlayPauseButton
-@onready var _stop_button: Button = $MarginContainer/BoxContainer/HBoxContainer/StopButton
+@onready var _controls_container  = $MarginContainer/BoxContainer/HBoxContainer
 @onready var _time_slider: Slider = $MarginContainer/BoxContainer/HBoxContainer/TimeSlider
 @onready var _time_label:  Label  = $MarginContainer/BoxContainer/HBoxContainer/TimeLabel
 
@@ -45,13 +44,31 @@ var _playing: bool = false:
 
 var _first_play: bool = false
 var _dragging: bool = false
+var _play_button: Button
+var _stop_button: Button
 
 signal play_pressed(paused: bool)
 signal stop_pressed()
 signal seeked(new_value: float)
 
 
+func _enter_tree() -> void:
+	_play_button = Button.new()
+	_play_button.pressed.connect(_on_play_pause_button_pressed)
+
+	_stop_button = Button.new()
+	_stop_button.pressed.connect(_on_stop_button_pressed)
+
+
 func _ready() -> void:
+	_ready_deferred.call_deferred()
+
+
+func _ready_deferred() -> void:
+	_controls_container.add_child(_play_button)
+	_controls_container.add_child(_stop_button)
+	_controls_container.move_child(_play_button, 0)
+	_controls_container.move_child(_stop_button, 1)
 	track = track
 	_playing = _playing
 	if Engine.is_editor_hint():

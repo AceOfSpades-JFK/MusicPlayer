@@ -1,9 +1,9 @@
-@icon("res://addons/music_player/assets/music-albums-fill.svg")
+@icon("res://addons/music_player/assets/MusicPlayer.svg")
 extends Node
 class_name MusicPlayer
 
 const CURRENT_VERSION: int = 1
-const PATH_TO_TRACKLIST: String = "res://tracklist.json"
+const GLOBAL_TRACKLIST: String = "res://tracklist.json"
 
 # 0.0 --------------------- 1.0
 #  ^                         ^
@@ -14,7 +14,7 @@ const MIN_DB = -80.0
 
 ### The audio bus to use for the music
 @export var bus: String = "Music"
-@export var json_path: String = PATH_TO_TRACKLIST
+@export var json_path: String = GLOBAL_TRACKLIST
 
 ### The tracklist for the current project
 var tracklist: Dictionary
@@ -35,7 +35,9 @@ func load_tracklist(filepath: String) -> bool:
 	# Load the JSON file as a string
 	var file = FileAccess.open(filepath, FileAccess.READ)
 	if !file:
-		push_error("File %s not found!" % filepath)
+		if filepath == GLOBAL_TRACKLIST:
+			push_warning("Global tracklist not found! Make sure you create a tracklist in the Music Manager screen and save it to \'%s\'" % GLOBAL_TRACKLIST)
+		else: push_error("File %s not found!" % filepath)
 		return false
 	var content = file.get_as_text()
 	

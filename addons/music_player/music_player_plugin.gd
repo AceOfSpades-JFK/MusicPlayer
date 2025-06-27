@@ -10,7 +10,7 @@ var main_panel_instance
 # Initialization
 func _enter_tree():
 	# Adds the music player type
-	add_custom_type("MusicPlayer", "Node", preload("script/music_player.gd"), preload("assets/music-albums-fill.svg"))
+	add_custom_type("MusicPlayer", "Node", preload("script/music_player.gd"), preload("assets/MusicPlayer.svg"))
 	
 	# Adds the music player as an autoload
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/music_player/script/music_player.gd")
@@ -19,6 +19,14 @@ func _enter_tree():
 	main_panel_instance = MUSIC_MENU_SCENE.instantiate()
 	EditorInterface.get_editor_main_screen().add_child(main_panel_instance)
 	_make_visible(false)
+
+
+# func _ready() -> void:
+# 	var result = GlobalMusicPlayer.load_tracklist(MusicPlayer.GLOBAL_TRACKLIST)
+# 	if result:
+# 		print("Loaded global tracklist at \'%s\'" % MusicPlayer.GLOBAL_TRACKLIST)
+# 	else:
+# 		print("Global tracklist not found! Do you have a tracklist saved in \'%s\' by any chance?" % MusicPlayer.GLOBAL_TRACKLIST)
 
 
 # De-initialization
@@ -44,4 +52,4 @@ func _get_plugin_name():
 
 func _get_plugin_icon():
 	# Must return some kind of Texture for the icon.
-	return preload("res://addons/music_player/assets/music.svg")
+	return preload("res://addons/music_player/assets/MusicManager.svg")

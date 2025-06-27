@@ -33,6 +33,6 @@ func _on_menu_button_pressed(id: int) -> void:
 	
 
 func reprint_track_info() -> void:
-	assert(track_info)
-	_name_label.text = track_info.name
-	_meta_label.text = "%s \n%sBPM" % [track_info.artist, track_info.bpm]
+	if track_info:
+		_name_label.text = track_info.name
+		_meta_label.text = "%s \n%sBPM" % [track_info.artist, track_info.bpm]

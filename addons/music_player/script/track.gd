@@ -1,4 +1,4 @@
-@icon("res://addons/music_player/assets/music-album.svg")
+@icon("res://addons/music_player/assets/Track.svg")
 extends Node
 class_name Track
 
