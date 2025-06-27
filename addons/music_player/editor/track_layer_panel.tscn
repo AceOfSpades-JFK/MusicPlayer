@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://beni82ibndav1"]
+[gd_scene load_steps=4 format=3 uid="uid://beni82ibndav1"]
 
 [ext_resource type="Script" path="res://addons/music_player/editor/track_layer_panel.gd" id="1_78ls3"]
+[ext_resource type="Texture2D" uid="uid://ce35j3fbncctg" path="res://addons/music_player/assets/test-waveform.png" id="2_w3rbr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rl4xw"]
 bg_color = Color(0, 0, 0, 0.129412)
@@ -38,10 +39,20 @@ text = "filename.ogg"
 [node name="Meta" type="Label" parent="BoxContainer/LayerInfo/FileContents"]
 layout_mode = 2
 
-[node name="Waveform" type="ColorRect" parent="BoxContainer/LayerInfo"]
+[node name="Panel" type="Panel" parent="BoxContainer/LayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
-color = Color(0.136826, 0.136826, 0.136826, 1)
+
+[node name="TextureRect" type="TextureRect" parent="BoxContainer/LayerInfo/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_w3rbr")
+expand_mode = 1
 
 [node name="LayerControls" type="HBoxContainer" parent="BoxContainer"]
 layout_mode = 2
