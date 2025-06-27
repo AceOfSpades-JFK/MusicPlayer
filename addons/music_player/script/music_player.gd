@@ -1,3 +1,4 @@
+@icon("res://addons/music_player/assets/music-albums-fill.svg")
 extends Node
 class_name MusicPlayer
 

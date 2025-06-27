@@ -1,8 +1,6 @@
+@icon("res://addons/music_player/assets/music-album.svg")
 extends Node
 class_name Track
-
-const MUSIC_PLAYER_BUS: String = "Music"
-const PATH_TO_MUSIC: String = "res://asset/music/"
 
 # 0.0 --------------------- 1.0
 #  ^                         ^
@@ -87,7 +85,7 @@ func _ready():
 		# Create the AudioStreamPlayer node
 		_stream = AudioStreamPlayer.new()
 		_stream.name = track_info.name
-		_stream.bus = MUSIC_PLAYER_BUS
+		_stream.bus = bus
 		add_child(_stream)
 
 		# Create the AudioStreamSynchronized streamlist
