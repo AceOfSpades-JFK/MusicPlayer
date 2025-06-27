@@ -7,10 +7,10 @@ A Godot 4.3 addon that simplifies global music playback while allowing for more 
 - **Layered tracks!**
   - Multiple stems for a track playing at once, allowing for music to be more dynamic
 - Simple volume control
-  - You can now adjust the volume of a track (and it's layers) using a normalized float
+  - You can now adjust the volume of a track (and it's layers) using a percentage (or a range from 0 to 1 inclusive)
 - Volume fading
   - You can fade the volume of a track using built-in functions
-  - You can also cross-fade between tracks
+  - You can also cross-fade between tracks!
 
 ## Installation
 
@@ -18,7 +18,7 @@ A Godot 4.3 addon that simplifies global music playback while allowing for more 
 
 2. Move the `addons/music_player` folder into your project's `addons` folder.
 
-3. Move `tracklist.json` into your project's root folder. You can make any changes to 
+3. Move `demo/tracklist.json` into your project's root folder. You can make any changes to the tracklist using the Music Manager screen.
 
 4. Open/reload the project.
 
@@ -26,7 +26,7 @@ A Godot 4.3 addon that simplifies global music playback while allowing for more 
 
 Once the plugin has been enabled, you can now use the Music Player by either:
 
-- Adding a `MusicPlayer` node to your scene, or
+- Adding a `MusicPlayer` node to your scene
 
 - Using the `GlobalMusicPlayer` autoload for music to play across scenes!
 
@@ -86,21 +86,17 @@ and for 2 seconds, the previous track fades out and gets unloaded. The new track
 
 Every track comes with these pieces of information:
 
-`name`: The name of the track. Idk what else to say
-
-`bpm`: The tempo of the track. All streams should match this tempo
-
-`artist`: The owner of the track. This could be the composer, the producer, or some other entity that was involved with this.
-
-`stream`: The audio file associated with the track.
+- `name`: The name of the track. Idk what else to say
+- `bpm`: The tempo of the track. All streams should match this tempo
+- `artist`: The owner of the track. This could be the composer, the producer, or some other entity that was involved with this.
+- `stream`: The audio file associated with the track.
 
 ## Planned features
 
-- Editor UI to add/remove music to the tracklist
-- Track BPM and time-signatures
 - Adjust playback speed
-- Time markers
-- Music switching depending on time markers
+- MusicPlayer in 2D and 3D scenes
+- Looping with intros
+- A more sophisticated playlist system...?
 
 ## Like what you see?
 
