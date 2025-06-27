@@ -1,7 +1,7 @@
 @tool
 extends Control
 
-var _panel_ps: PackedScene = preload("res://addons/music_player/editor/track_layer_panel.tscn")
+var _track_layer_ps: PackedScene = preload("res://addons/music_player/editor/track_layer_panel.tscn")
 var _track_ps: PackedScene = preload("res://addons/music_player/editor/track_panel.tscn")
 var _create_track_ps: PackedScene = preload("res://addons/music_player/editor/create_track_dialogue.tscn")
 var _edit_track_ps: PackedScene = preload("res://addons/music_player/editor/edit_track_dialogue.tscn")
@@ -73,7 +73,7 @@ func _load_tracks() -> void:
 
 
 func _add_track_layer_panel(t: TrackInfo, i: int) -> void:
-	var p = _panel_ps.instantiate()
+	var p = _track_layer_ps.instantiate()
 	p.track_info = t
 	p.layer_index = i
 	p.mute_toggled.connect(_on_layer_mute_toggled)

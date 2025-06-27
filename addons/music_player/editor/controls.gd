@@ -111,7 +111,7 @@ func _on_play_pause_button_pressed() -> void:
 
 
 func reset() -> void:
-	_play_button.icon = EditorInterface.get_editor_theme().get_icon("Play", "EditorIcons")
+	#_play_button.icon = EditorInterface.get_editor_theme().get_icon("Play", "EditorIcons")
 	_time_slider.value = 0.0
 	_first_play = false
 	_playing = false
