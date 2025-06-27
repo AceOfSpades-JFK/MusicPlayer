@@ -10,7 +10,7 @@ var main_panel_instance
 # Initialization
 func _enter_tree():
 	# Adds the music player type
-	add_custom_type("MusicPlayer", "Node", preload("script/music_player.gd"), preload("icon.svg"))
+	add_custom_type("MusicPlayer", "Node", preload("script/music_player.gd"), preload("assets/music-albums-fill.svg"))
 	
 	# Adds the music player as an autoload
 	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/music_player/script/music_player.gd")
@@ -44,4 +44,4 @@ func _get_plugin_name():
 
 func _get_plugin_icon():
 	# Must return some kind of Texture for the icon.
-	return EditorInterface.get_editor_theme().get_icon("Node", "EditorIcons")
+	return preload("res://addons/music_player/assets/music.svg")

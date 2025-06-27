@@ -1,6 +1,5 @@
 @tool
 extends MarginContainer
-class_name TrackLayerPanel
 
 const POPUP_ID_REMOVE: int = 1
 

@@ -26,8 +26,8 @@ signal loaded_track(track_name: String)
 signal unloaded_track(unloaded_track_name: String)
 
 
-# func _ready():
-# 	load_tracklist(PATH_TO_TRACKLIST)
+func _ready():
+	load_tracklist(json_path)
 
 
 ### Load the tracklist
@@ -170,10 +170,6 @@ func load_track(trackname: String, vol: float = 1.0, autoplay: bool = true) -> b
 #	duration: How long the track should fade
 #	Returns true on success
 func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -> bool:
-	var old_t: = _current_track.name
-	var queue_current_track_free: Callable = func():
-		unloaded_track.emit(old_t)
-
 	if has_track(trackname):
 		# Fade out the old track
 		if _current_track:
@@ -184,7 +180,7 @@ func fade_to_track(trackname: String, vol: float = 1.0, duration: float = 1.0) -
 			
 			# Fade the previous track out
 			_current_track.fade_finished.connect(_current_track.queue_free)
-			_current_track.fade_finished.connect(queue_current_track_free)
+			_current_track.fade_finished.connect(func(): unloaded_track.emit(_current_track.name))
 			_current_track.fade_out(duration)
 			_current_track.name = '__goodbye__'
 

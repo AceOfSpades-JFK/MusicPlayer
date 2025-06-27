@@ -73,7 +73,7 @@ func _load_tracks() -> void:
 
 
 func _add_track_layer_panel(t: TrackInfo, i: int) -> void:
-	var p: TrackLayerPanel = _panel_ps.instantiate()
+	var p = _panel_ps.instantiate()
 	p.track_info = t
 	p.layer_index = i
 	p.mute_toggled.connect(_on_layer_mute_toggled)

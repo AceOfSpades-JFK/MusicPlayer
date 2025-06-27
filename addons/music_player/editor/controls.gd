@@ -27,7 +27,22 @@ var track: Track:
 			_time_slider.editable = false
 		track = v
 
-var _playing: bool = false
+var _playing: bool = false:
+	set(v):
+		_playing = v
+		if Engine.is_editor_hint():
+			_play_button.text = ""
+			if !v:
+				_play_button.icon = EditorInterface.get_editor_theme().get_icon("Play", "EditorIcons")
+			else:
+				_play_button.icon = EditorInterface.get_editor_theme().get_icon("Pause", "EditorIcons")
+		else:
+			_play_button.icon = null
+			if !v:
+				_play_button.text = "Play"
+			else:
+				_play_button.text = "Pause"
+
 var _first_play: bool = false
 var _dragging: bool = false
 
@@ -38,6 +53,11 @@ signal seeked(new_value: float)
 
 func _ready() -> void:
 	track = track
+	_playing = _playing
+	if Engine.is_editor_hint():
+		_stop_button.icon = EditorInterface.get_editor_theme().get_icon("Stop", "EditorIcons")
+	else:
+		_stop_button.text = "Stop"
 
 
 func _process(delta: float) -> void:
@@ -59,10 +79,10 @@ func _process(delta: float) -> void:
 
 func _on_play_pause_button_pressed() -> void:
 	if _playing:
-		_play_button.text = "Play"
+		# _play_button.icon = EditorInterface.get_base_control().get_icon("Play", "EditorIcons")
 		track.pause()
 	else:
-		_play_button.text = "Pause"
+		# _play_button.icon = EditorInterface.get_base_control().get_icon("Pause", "EditorIcons")
 		if !_first_play:
 			track.play()
 			_first_play = true
@@ -74,7 +94,7 @@ func _on_play_pause_button_pressed() -> void:
 
 
 func reset() -> void:
-	_play_button.text = "Play"
+	_play_button.icon = EditorInterface.get_editor_theme().get_icon("Play", "EditorIcons")
 	_time_slider.value = 0.0
 	_first_play = false
 	_playing = false

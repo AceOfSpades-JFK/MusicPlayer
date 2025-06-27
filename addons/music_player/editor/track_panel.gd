@@ -1,6 +1,5 @@
 @tool
 extends MarginContainer
-class_name TrackPanel
 
 const _POPUP_ID_EDIT: int = 0
 const _POPUP_ID_REMOVE: int = 1

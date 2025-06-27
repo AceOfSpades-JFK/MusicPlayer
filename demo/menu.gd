@@ -2,7 +2,7 @@ extends Control
 
 var _dragging: bool = false
 @onready var volume_slider: HSlider = $VBoxContainer/HBoxContainer/VolumeSlider
-@onready var _music_player: MusicPlayer = GlobalMusicPlayer
+@onready var _music_player: MusicPlayer = $MusicPlayer
 
 func _on_regal_pressed():
 	_change_track("Regal")

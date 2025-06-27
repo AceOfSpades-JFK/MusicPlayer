@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bc7hkifihjt2d"]
+[gd_scene load_steps=3 format=3 uid="uid://bc7hkifihjt2d"]
 
 [ext_resource type="Script" path="res://demo/menu.gd" id="1_prkl2"]
+[ext_resource type="Script" path="res://addons/music_player/script/music_player.gd" id="2_diln7"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -84,6 +85,10 @@ text = "Fade Out"
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Layers:"
+
+[node name="MusicPlayer" type="Node" parent="."]
+script = ExtResource("2_diln7")
+json_path = "res://demo/tracklist.json"
 
 [connection signal="pressed" from="VBoxContainer/Regal" to="." method="_on_regal_pressed" flags=3]
 [connection signal="pressed" from="VBoxContainer/Hell" to="." method="_on_hell_pressed" flags=3]
