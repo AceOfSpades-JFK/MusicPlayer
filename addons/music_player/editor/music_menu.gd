@@ -165,7 +165,7 @@ func _on_track_list_load_dialogue_file_selected(path: String) -> void:
 func _save_tracklist(path: String) -> void:
 	var write_to = FileAccess.open(path, FileAccess.WRITE)
 	var dic: Dictionary = {
-		"version": 1,
+		"version": MusicPlayer.CURRENT_VERSION,
 		"tracks": []
 	}
 
