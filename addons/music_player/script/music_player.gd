@@ -13,8 +13,8 @@ const MAX_DB = 0.0
 const MIN_DB = -80.0
 
 ### The audio bus to use for the music
-@export var bus: StringName = "Music"
-@export var json_path: StringName = PATH_TO_TRACKLIST
+@export var bus: String = "Music"
+@export var json_path: String = PATH_TO_TRACKLIST
 
 ### The tracklist for the current project
 var tracklist: Dictionary
@@ -22,8 +22,8 @@ var _current_track: Track
 
 signal loaded_tracklist
 signal unloaded_tracklist
-signal loaded_track(track_name: StringName)
-signal unloaded_track(unloaded_track_name: StringName)
+signal loaded_track(track_name: String)
+signal unloaded_track(unloaded_track_name: String)
 
 
 # func _ready():
@@ -31,7 +31,7 @@ signal unloaded_track(unloaded_track_name: StringName)
 
 
 ### Load the tracklist
-func load_tracklist(filepath: StringName) -> bool:
+func load_tracklist(filepath: String) -> bool:
 	# Load the JSON file as a string
 	var file = FileAccess.open(filepath, FileAccess.READ)
 	if !file:
@@ -90,7 +90,7 @@ func load_tracklist(filepath: StringName) -> bool:
 ### Checks if the tracklist has a track that goes by the passed in name
 #	tn: The name of the track you want to check for
 #	Returns true if the tracklist has that track
-func has_track(tn: StringName) -> bool:
+func has_track(tn: String) -> bool:
 	return tracklist.has(tn)
 	
 
@@ -108,7 +108,7 @@ func add_track(t: TrackInfo) -> bool:
 ### Removes a track based on the passed track name
 #	tn: Name of the track you want removed
 #	Returns the removed track info
-func remove_track(tn: StringName) -> TrackInfo:
+func remove_track(tn: String) -> TrackInfo:
 	if has_track(tn):
 		var ti: TrackInfo = tracklist[tn]
 		tracklist.erase(tn)
@@ -122,7 +122,7 @@ func remove_track(tn: StringName) -> TrackInfo:
 #	tn: Name of the track you want to modify
 #	ti: The track info to 
 #	Returns the modified track info
-func modify_track(tn: StringName, ti: TrackInfo) -> TrackInfo:
+func modify_track(tn: String, ti: TrackInfo) -> TrackInfo:
 	if has_track(tn):
 		tracklist[tn].transfer(ti)
 		if tn != ti.name:

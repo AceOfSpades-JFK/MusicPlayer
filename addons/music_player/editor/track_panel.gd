@@ -9,9 +9,9 @@ const _POPUP_ID_REMOVE: int = 1
 @export var _meta_label: Label
 @onready var _menu_button: MenuButton = $HBoxContainer/MarginContainer/VBoxContainer/MenuButton
 
-signal open(tn: StringName)
-signal remove_requested(tn: StringName)
-signal edit_requested(tn: StringName)
+signal open(tn: String)
+signal remove_requested(tn: String)
+signal edit_requested(tn: String)
 
 var track_info: TrackInfo
 

@@ -29,14 +29,14 @@ var _create_window_path: NodePath = "CreateTrackDialogue"
 @onready var _tracklist_label: Label = get_node(_tracklist_label_path)
 @onready var _controls: Control = get_node(_controls_path)
 
-var _tracklist_file: StringName = ""
+var _tracklist_file: String = ""
 var _playing: bool = false
 var _first_play: bool = false
 var _dragging: bool = false
 var _dirty_tracklist: bool = false
 var _accept_dialog: AcceptDialog
 var _track_info_dialog: ConfirmationDialog
-var _track_editing: StringName = ""
+var _track_editing: String = ""
 
 var _current_track: Track:
 	get:
@@ -103,7 +103,7 @@ func _on_layer_mute_toggled(muted: bool, layer_index: int) -> void:
 		_current_track.set_layer_volume(layer_index, 1.0)
 	
 
-func _on_track_open(tn: StringName) -> void:
+func _on_track_open(tn: String) -> void:
 	# Load the current track and stop playing the previous one
 	if (!_music_player.load_track(tn, 1.0, false)):
 		return
@@ -145,7 +145,7 @@ func _on_track_list_load_dialogue_canceled() -> void:
 	_saveas_button.disabled = !grey_save
 
 
-func _on_track_list_load_dialogue_file_selected(path: StringName) -> void:
+func _on_track_list_load_dialogue_file_selected(path: String) -> void:
 	_tracklist_label.text = path
 	_saveas_button.visible = true
 	_dirty_tracklist = false
@@ -162,7 +162,7 @@ func _on_track_list_load_dialogue_file_selected(path: StringName) -> void:
 	_on_track_list_load_dialogue_canceled()
 
 
-func _save_tracklist(path: StringName) -> void:
+func _save_tracklist(path: String) -> void:
 	var write_to = FileAccess.open(path, FileAccess.WRITE)
 	var dic: Dictionary = {
 		"version": 1,
@@ -267,7 +267,7 @@ func _on_layer_remove_requested(index: int) -> void:
 	_on_track_list_load_dialogue_canceled()
 
 
-func _on_track_removed(tn: StringName):
+func _on_track_removed(tn: String):
 	if _current_track && tn == _current_track.track_info.name:
 		_clear_layers()
 		
@@ -278,7 +278,7 @@ func _on_track_removed(tn: StringName):
 	_on_track_list_load_dialogue_canceled()
 
 
-func _on_track_editing(tn: StringName) -> void:
+func _on_track_editing(tn: String) -> void:
 	_track_editing = tn
 	
 	_track_info_dialog = _edit_track_ps.instantiate()

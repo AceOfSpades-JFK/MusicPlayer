@@ -1,8 +1,8 @@
 extends Resource
 class_name TrackInfo
 
-var name: StringName
-var artist: StringName
+var name: String
+var artist: String
 var bpm: float
 var beat_count: int
 var stream: Array
